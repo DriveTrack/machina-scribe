@@ -26,6 +26,22 @@ final class AppState {
     /// recording finished and stays stuck on "No meetings yet".
     private(set) var meetingsToken = UUID()
 
+    /// Which model writes the summaries. Cost differs sixfold; quality is a
+    /// judgement only the reader can make, so it is a setting.
+    var summaryModel: Summarizer.Model {
+        didSet { UserDefaults.standard.set(summaryModel.rawValue, forKey: "summaryModel") }
+    }
+
+    /// The Notion database meetings are filed into, once chosen.
+    var notionDestination: NotionExporter.Destination? {
+        didSet {
+            let data = notionDestination.flatMap { try? JSONEncoder().encode($0) }
+            UserDefaults.standard.set(data, forKey: "notionDestination")
+        }
+    }
+
+    private(set) var hasNotionKey: Bool
+
     /// How long finished recordings are kept so voices can be identified by
     /// ear afterwards. Zero keeps none.
     var keepAudioHours: Int {
@@ -46,6 +62,11 @@ final class AppState {
         supabaseAnonKey = UserDefaults.standard.string(forKey: "supabaseAnonKey") ?? ""
         hasGeminiKey = Keychain.get("gemini")?.isEmpty == false
         keepAudioHours = UserDefaults.standard.object(forKey: "keepAudioHours") as? Int ?? 24
+        summaryModel = UserDefaults.standard.string(forKey: "summaryModel")
+            .flatMap(Summarizer.Model.init(rawValue:)) ?? .flashLite
+        notionDestination = UserDefaults.standard.data(forKey: "notionDestination")
+            .flatMap { try? JSONDecoder().decode(NotionExporter.Destination.self, from: $0) }
+        hasNotionKey = Keychain.get("notion")?.isEmpty == false
         rebuild()
         applyRetention()
     }
@@ -71,6 +92,27 @@ final class AppState {
     func clearGeminiKey() {
         Keychain.delete("gemini")
         hasGeminiKey = false
+    }
+
+    func setNotionKey(_ key: String) throws {
+        try Keychain.set(key, for: "notion")
+        hasNotionKey = true
+    }
+
+    func clearNotionKey() {
+        Keychain.delete("notion")
+        hasNotionKey = false
+        notionDestination = nil
+    }
+
+    /// Built per use rather than held: the key can change under us, and an
+    /// exporter carrying a stale token fails in a confusing way.
+    var notion: NotionExporter? {
+        Keychain.get("notion").map { NotionExporter(token: $0) }
+    }
+
+    var summarizer: Summarizer? {
+        Keychain.get("gemini").map { Summarizer(apiKey: $0, model: summaryModel) }
     }
 
     var isConfigured: Bool {

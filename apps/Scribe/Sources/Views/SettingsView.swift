@@ -10,6 +10,9 @@ struct SettingsView: View {
     @State private var message: String?
     @State private var busy = false
     @State private var heldBytes: Int64 = 0
+    @State private var notionKey = ""
+    @State private var notionDatabases: [NotionExporter.Destination] = []
+    @State private var loadingNotion = false
 
     var body: some View {
         @Bindable var app = app
@@ -53,6 +56,62 @@ struct SettingsView: View {
                 Text("Gemini")
             } footer: {
                 Text("Kept in the keychain, sent only to Google when a recording is transcribed.")
+            }
+
+            Section {
+                Picker("Summaries written by", selection: Binding(
+                    get: { app.summaryModel },
+                    set: { app.summaryModel = $0 }
+                )) {
+                    ForEach(Summarizer.Model.allCases) { model in
+                        Text(model.label).tag(model)
+                    }
+                }
+            } header: {
+                Text("Summaries")
+            } footer: {
+                Text(app.summaryModel == .flashLite
+                     ? "About half a cent for an hour-long meeting. Fine for most notes."
+                     : "About six times the cost — still pennies — and better at working out who committed to what.")
+            }
+
+            Section {
+                SecureField("Internal integration secret", text: $notionKey)
+                HStack {
+                    Button("Save key") { saveNotionKey() }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(notionKey.trimmingCharacters(in: .whitespaces).isEmpty)
+                    if app.hasNotionKey {
+                        Spacer()
+                        Button("Remove", role: .destructive) { app.clearNotionKey() }
+                            .font(.footnote)
+                    }
+                }
+
+                if app.hasNotionKey {
+                    if notionDatabases.isEmpty {
+                        Button(loadingNotion ? "Loading…" : "Find my databases") {
+                            Task { await loadNotionDatabases() }
+                        }
+                        .disabled(loadingNotion)
+                    } else {
+                        Picker("File meetings into", selection: Binding(
+                            get: { app.notionDestination?.id ?? "" },
+                            set: { id in
+                                app.notionDestination = notionDatabases.first { $0.id == id }
+                            }
+                        )) {
+                            Text("Choose…").tag("")
+                            ForEach(notionDatabases) { database in
+                                Text(database.title).tag(database.id)
+                            }
+                        }
+                    }
+                }
+            } header: {
+                Text("Notion")
+            } footer: {
+                Text(notionHint)
             }
 
             Section {
@@ -127,6 +186,44 @@ struct SettingsView: View {
         .task {
             if app.hasGeminiKey { geminiKey = "" }
             heldBytes = app.archive.bytesHeld()
+            if app.hasNotionKey, notionDatabases.isEmpty { await loadNotionDatabases() }
+        }
+    }
+
+    /// Notion only exposes what has been explicitly shared with an
+    /// integration, which is the single most common reason a database is
+    /// missing from the list -- so say it here rather than showing an empty
+    /// picker with no explanation.
+    private var notionHint: String {
+        if !app.hasNotionKey {
+            return "Create an internal integration at notion.so/my-integrations, copy its secret, then share the target database with it from the database's ⋯ menu → Connections."
+        }
+        if notionDatabases.isEmpty {
+            return "Nothing found yet. In Notion, open the database → ⋯ → Connections → add your integration, then look again."
+        }
+        return "Meetings are filed as new pages: summary, action items as checkboxes, then the transcript."
+    }
+
+    private func saveNotionKey() {
+        do {
+            try app.setNotionKey(notionKey.trimmingCharacters(in: .whitespaces))
+            notionKey = ""
+            message = "Notion key saved."
+            Task { await loadNotionDatabases() }
+        } catch {
+            message = error.localizedDescription
+        }
+    }
+
+    private func loadNotionDatabases() async {
+        guard let notion = app.notion else { return }
+        loadingNotion = true
+        defer { loadingNotion = false }
+        do {
+            notionDatabases = try await notion.destinations()
+            if notionDatabases.isEmpty { message = "No databases are shared with that integration yet." }
+        } catch {
+            message = error.localizedDescription
         }
     }
 

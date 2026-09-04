@@ -30,6 +30,15 @@ export interface LineRow {
   text: string;
 }
 
+export interface ActionItemRow {
+  meeting_id: string;
+  meeting_title: string | null;
+  started_at: string;
+  task: string;
+  owner: string | null;
+  due: string | null;
+}
+
 export interface SearchRow {
   meeting_id: string;
   meeting_title: string | null;
@@ -120,6 +129,16 @@ export class Store {
         p_person: person ?? null,
         p_limit: limit,
         p_user_id: this.userId
+      })
+    );
+  }
+
+  async actionItems(opts: { owner?: string; since?: string }): Promise<ActionItemRow[]> {
+    return this.unwrap(
+      await this.db.rpc('action_items', {
+        p_user_id: this.userId,
+        p_owner: opts.owner ?? null,
+        p_since: opts.since ?? null
       })
     );
   }

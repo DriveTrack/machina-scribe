@@ -11,6 +11,7 @@ struct RecordView: View {
     /// Set when the name is being added for a line of preview text rather than
     /// for whoever is talking right now.
     @State private var pendingChunkMs: Int?
+    @State private var rosterName = ""
 
     private var session: RecordingSession? { app.session }
 
@@ -19,6 +20,7 @@ struct RecordView: View {
             VStack(spacing: 28) {
                 header
                 meter
+                if session?.isRecording != true { roster }
                 controls
                 if session?.isRecording == true {
                     taggingPad
@@ -110,6 +112,73 @@ struct RecordView: View {
         }
     }
 
+    // MARK: - Roster
+
+    /// Named before anyone speaks, so the tagging pad is short and specific
+    /// from the first second instead of a wall of everyone ever recorded.
+    private var roster: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Who's in this meeting?")
+                .font(.headline)
+            Text("Pick them now and tagging is one tap during the meeting. You can still add someone who turns up late.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if !app.people.isEmpty {
+                FlowLayout(spacing: 8) {
+                    ForEach(app.people) { person in
+                        let isIn = session?.attendees.contains(person.name) ?? false
+                        Button {
+                            toggleAttendee(person.name)
+                        } label: {
+                            HStack(spacing: 5) {
+                                Image(systemName: isIn ? "checkmark.circle.fill" : "circle")
+                                Text(person.name)
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(isIn ? Color.accentColor : .secondary)
+                    }
+                }
+            }
+
+            HStack {
+                TextField("Add someone new", text: $rosterName)
+                    .textFieldStyle(.roundedBorder)
+                    .onSubmit { commitRosterName() }
+                Button("Add") { commitRosterName() }
+                    .disabled(rosterName.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+
+            if let attendees = session?.attendees, !attendees.isEmpty {
+                Text("In the room: \(attendees.joined(separator: ", "))")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding()
+        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+    }
+
+    private func toggleAttendee(_ name: String) {
+        guard let session else { return }
+        if let index = session.attendees.firstIndex(of: name) {
+            session.attendees.remove(at: index)
+        } else {
+            session.attendees.append(name)
+        }
+    }
+
+    private func commitRosterName() {
+        let name = rosterName.trimmingCharacters(in: .whitespacesAndNewlines)
+        rosterName = ""
+        guard !name.isEmpty else { return }
+        session?.addAttendee(name)
+        Task { await app.addPerson(name) }
+    }
+
     // MARK: - Tagging
 
     private var taggingPad: some View {
@@ -122,8 +191,8 @@ struct RecordView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             FlowLayout(spacing: 8) {
-                ForEach(app.people) { person in
-                    Button(person.name) { session?.tag(person.name) }
+                ForEach(taggableNames, id: \.self) { name in
+                    Button(name) { session?.tag(name) }
                         .buttonStyle(.bordered)
                         .controlSize(.large)
                 }
@@ -238,8 +307,8 @@ struct RecordView: View {
         let tagged = session?.taggedName(from: chunk.startMs, to: chunk.endMs)
 
         return Menu {
-            ForEach(app.people) { person in
-                Button(person.name) { session?.tag(person.name, atMs: chunk.startMs) }
+            ForEach(taggableNames, id: \.self) { name in
+                Button(name) { session?.tag(name, atMs: chunk.startMs) }
             }
             Divider()
             Button("Someone else…") {
@@ -271,6 +340,13 @@ struct RecordView: View {
         }
         .menuStyle(.borderlessButton)
         .buttonStyle(.plain)
+    }
+
+    /// The people worth showing a button for: whoever was named up front, or
+    /// everyone known if the roster was skipped.
+    private var taggableNames: [String] {
+        let attendees = session?.attendees ?? []
+        return attendees.isEmpty ? app.people.map(\.name) : attendees
     }
 
     private func stamp(_ ms: Int) -> String {

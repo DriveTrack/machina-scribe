@@ -18,6 +18,9 @@ final class RecordingSession {
     private(set) var phase: Phase = .idle
     private(set) var tags: [LiveTag] = []
     private(set) var meetingId: UUID?
+    /// Named before the meeting starts. The tagging pad shows these rather than
+    /// everyone ever recorded, so the right button is easy to hit mid-sentence.
+    var attendees: [String] = []
 
     let recorder = AudioRecorder()
     /// Recordings survive for a short window after the meeting so voices can
@@ -37,6 +40,18 @@ final class RecordingSession {
 
     // MARK: - Recording
 
+    /// Someone turned up who was not on the list.
+    func addAttendee(_ name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty,
+              !attendees.contains(where: { $0.caseInsensitiveCompare(trimmed) == .orderedSame })
+        else { return }
+        attendees.append(trimmed)
+        if let meeting = meetingId {
+            Task { try? await store.setAttendees(meeting: meeting, names: attendees) }
+        }
+    }
+
     func start(title: String?, location: String?) async {
         guard await recorder.requestPermission() else {
             phase = .failed("Microphone access was denied. Grant it in system settings.")
@@ -51,6 +66,7 @@ final class RecordingSession {
             let id = try await store.startMeeting(title: title, location: location)
             meetingId = id
             tags = []
+            try? await store.setAttendees(meeting: id, names: attendees)
             try recorder.start()
             phase = .recording
         } catch {

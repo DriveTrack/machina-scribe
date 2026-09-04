@@ -12,12 +12,14 @@ struct Meeting: Codable, Identifiable, Hashable, Sendable {
     var error: String?
     var notes: String?
     var summary: String?
+    var notionURL: String?
 
     enum CodingKeys: String, CodingKey {
         case id, title, location, source, status, error, notes, summary
         case startedAt = "started_at"
         case endedAt = "ended_at"
         case durationMs = "duration_ms"
+        case notionURL = "notion_url"
     }
 
     var displayTitle: String { title?.isEmpty == false ? title! : "Untitled meeting" }

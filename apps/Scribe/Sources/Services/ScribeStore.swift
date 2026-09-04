@@ -210,6 +210,10 @@ final class ScribeStore {
             .value
     }
 
+    func meeting(_ id: UUID) async throws -> Meeting? {
+        try await client.from("meetings").select().eq("id", value: id).maybeSingle().execute().value
+    }
+
     func transcript(meeting: UUID) async throws -> [TranscriptLine] {
         try await client.from("transcript_lines")
             .select("idx,start_ms,end_ms,text,speaker,speaker_label,resolved_by")
@@ -246,6 +250,78 @@ final class ScribeStore {
             .single()
             .execute()
             .value
+    }
+
+    // MARK: - Attendees
+
+    private struct NewAttendee: Encodable {
+        let user_id: UUID
+        let meeting_id: UUID
+        let name: String
+    }
+
+    /// Who is expected in the room, named before anyone speaks so the tagging
+    /// pad is short and specific from the first second.
+    func setAttendees(meeting: UUID, names: [String]) async throws {
+        guard let user = await userId else { return }
+        try await client.from("meeting_attendees").delete().eq("meeting_id", value: meeting).execute()
+        let rows = names.map { NewAttendee(user_id: user, meeting_id: meeting, name: $0) }
+        guard !rows.isEmpty else { return }
+        try await client.from("meeting_attendees").insert(rows).execute()
+    }
+
+    func attendees(meeting: UUID) async throws -> [String] {
+        struct Row: Decodable { let name: String }
+        let rows: [Row] = try await client
+            .from("meeting_attendees")
+            .select("name")
+            .eq("meeting_id", value: meeting)
+            .order("created_at")
+            .execute()
+            .value
+        return rows.map(\.name)
+    }
+
+    // MARK: - Summary and export
+
+    private struct SummaryPatch: Encodable {
+        let summary: String
+        let summary_json: MeetingSummary
+        let summarized_at: Date
+    }
+
+    func saveSummary(meeting: UUID, _ summary: MeetingSummary) async throws {
+        try await client
+            .from("meetings")
+            .update(SummaryPatch(summary: summary.summary, summary_json: summary, summarized_at: Date()))
+            .eq("id", value: meeting)
+            .execute()
+    }
+
+    func summary(meeting: UUID) async throws -> MeetingSummary? {
+        struct Row: Decodable { let summary_json: MeetingSummary? }
+        let row: Row? = try await client
+            .from("meetings")
+            .select("summary_json")
+            .eq("id", value: meeting)
+            .maybeSingle()
+            .execute()
+            .value
+        return row?.summary_json
+    }
+
+    private struct ExportPatch: Encodable {
+        let notion_page_id: String
+        let notion_url: String
+        let exported_at: Date
+    }
+
+    func recordNotionExport(meeting: UUID, pageId: String, url: String) async throws {
+        try await client
+            .from("meetings")
+            .update(ExportPatch(notion_page_id: pageId, notion_url: url, exported_at: Date()))
+            .eq("id", value: meeting)
+            .execute()
     }
 
     func setNotes(meeting: UUID, notes: String) async throws {

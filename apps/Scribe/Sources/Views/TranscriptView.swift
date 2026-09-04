@@ -16,10 +16,15 @@ struct TranscriptView: View {
     @State private var audioURL: URL?
     @State private var audioExpiry: Date?
     @State private var playback = PlaybackController()
+    @State private var summary: MeetingSummary?
+    @State private var meeting: Meeting?
+    @State private var working: String?
+    @State private var failure: String?
 
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 18) {
+                summarySection
                 if !problems.isEmpty { problemsBanner }
                 if audioURL != nil { player }
                 if !unnamedLabels.isEmpty { namingPrompt }
@@ -206,12 +211,179 @@ struct TranscriptView: View {
         line.speaker == line.speakerLabel
     }
 
+    // MARK: - Summary and export
+
+    @ViewBuilder
+    private var summarySection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Summary").font(.headline)
+                Spacer()
+                if let working {
+                    HStack(spacing: 6) {
+                        ProgressView().controlSize(.small)
+                        Text(working).font(.caption).foregroundStyle(.secondary)
+                    }
+                } else {
+                    Button(summary == nil ? "Summarise" : "Redo") { Task { await summarise() } }
+                        .disabled(lines.isEmpty || !app.hasGeminiKey)
+                }
+            }
+
+            if let summary {
+                Text(summary.summary)
+                    .font(.callout)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if !summary.actionItems.isEmpty {
+                    listing("Action items") {
+                        ForEach(summary.actionItems) { item in
+                            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                Image(systemName: "square").foregroundStyle(.secondary)
+                                Text(actionLine(item))
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .font(.callout)
+                        }
+                    }
+                }
+                if !summary.decisions.isEmpty {
+                    listing("Decisions") {
+                        ForEach(summary.decisions, id: \.self) { bulletRow($0) }
+                    }
+                }
+                if !summary.openQuestions.isEmpty {
+                    listing("Open questions") {
+                        ForEach(summary.openQuestions, id: \.self) { bulletRow($0) }
+                    }
+                }
+
+                Divider()
+                notionRow
+            } else if working == nil {
+                Text(app.hasGeminiKey
+                     ? "Pull out the decisions and action items from this meeting."
+                     : "Add a Gemini API key in Settings to summarise.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if let failure {
+                Text(failure)
+                    .font(.footnote)
+                    .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding()
+        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    @ViewBuilder
+    private var notionRow: some View {
+        if let url = meeting?.notionURL, let link = URL(string: url) {
+            HStack {
+                Label("Filed in Notion", systemImage: "checkmark.circle.fill")
+                    .font(.callout)
+                    .foregroundStyle(.green)
+                Spacer()
+                Link("Open", destination: link).font(.callout)
+                Button("Send again") { Task { await sendToNotion() } }.font(.caption)
+            }
+        } else if app.hasNotionKey, let destination = app.notionDestination {
+            HStack {
+                Text("Send to **\(destination.title)** in Notion")
+                    .font(.callout)
+                Spacer()
+                Button("Send") { Task { await sendToNotion() } }
+            }
+        } else if app.hasNotionKey {
+            Text("Pick a Notion database in Settings to file meetings there.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func actionLine(_ item: MeetingSummary.ActionItem) -> String {
+        var line = item.task
+        if let owner = item.owner, !owner.isEmpty { line += " — \(owner)" }
+        if let due = item.due, !due.isEmpty { line += " (\(due))" }
+        return line
+    }
+
+    @ViewBuilder
+    private func listing<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title).font(.subheadline.weight(.semibold))
+            content()
+        }
+    }
+
+    private func bulletRow(_ text: String) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text("•").foregroundStyle(.secondary)
+            Text(text).fixedSize(horizontal: false, vertical: true)
+        }
+        .font(.callout)
+    }
+
+    private func summarise() async {
+        guard let summarizer = app.summarizer else { return }
+        working = "Summarising"
+        failure = nil
+        defer { working = nil }
+        do {
+            let text = lines.map { "\($0.speaker): \($0.text)" }.joined(separator: "\n")
+            let result = try await summarizer.summarize(
+                title: meeting?.title, transcript: text, notes: meeting?.notes
+            )
+            try await app.store?.saveSummary(meeting: meetingId, result)
+            summary = result
+            app.meetingsDidChange()
+        } catch {
+            failure = error.localizedDescription
+        }
+    }
+
+    private func sendToNotion() async {
+        guard let notion = app.notion,
+              let destination = app.notionDestination,
+              let meeting
+        else { return }
+
+        working = "Sending to Notion"
+        failure = nil
+        defer { working = nil }
+        do {
+            let text = lines.map { "\($0.speaker): \($0.text)" }.joined(separator: "\n")
+            let result = try await notion.export(
+                to: destination,
+                title: meeting.displayTitle,
+                startedAt: meeting.startedAt,
+                durationMs: meeting.durationMs,
+                speakers: Array(Set(lines.map(\.speaker))).sorted(),
+                summary: summary,
+                notes: meeting.notes,
+                transcript: text
+            )
+            try await app.store?.recordNotionExport(
+                meeting: meetingId, pageId: result.pageId, url: result.url
+            )
+            await load()
+        } catch {
+            failure = error.localizedDescription
+        }
+    }
+
     // MARK: - Actions
 
     private func load() async {
         isLoading = true
         lines = (try? await app.store?.transcript(meeting: meetingId)) ?? []
         problems = (try? await app.store?.tagProblems(meeting: meetingId)) ?? []
+        summary = try? await app.store?.summary(meeting: meetingId)
+        meeting = try? await app.store?.meeting(meetingId)
 
         let archive = app.archive
         audioURL = archive.url(for: meetingId)

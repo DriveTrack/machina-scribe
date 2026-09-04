@@ -142,6 +142,39 @@ export const TOOLS: ToolSpec[] = [
   },
 
   {
+    name: 'action_items',
+    description:
+      'Everything anyone committed to across meetings, pulled from the summaries. ' +
+      'Use for "what did I agree to", "what does Priya owe me", or chasing follow-ups. ' +
+      'Only covers meetings that have been summarised.',
+    readOnly: true,
+    inputShape: {
+      owner: z.string().optional().describe('Only items owned by this person'),
+      since: z.string().optional().describe('ISO date; only meetings at or after this')
+    },
+    async run(store, args) {
+      const items = await store.actionItems({
+        owner: args.owner as string | undefined,
+        since: args.since as string | undefined
+      });
+      if (items.length === 0) {
+        return args.owner
+          ? `Nothing outstanding for ${args.owner}.`
+          : 'No action items recorded. Meetings need to be summarised first.';
+      }
+      return items
+        .map(item => {
+          const bits = [item.task];
+          if (item.owner) bits.push(`owner: ${item.owner}`);
+          if (item.due) bits.push(`due: ${item.due}`);
+          return `${bits.join(' · ')}\n  from "${item.meeting_title ?? 'Untitled'}" on ${day(item.started_at)}` +
+                 `\n  meeting_id: ${item.meeting_id}`;
+        })
+        .join('\n\n');
+    }
+  },
+
+  {
     name: 'name_speaker',
     description:
       'Attach a name to one diarized voice in a meeting. This renames every turn ' +
