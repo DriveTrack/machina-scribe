@@ -171,6 +171,31 @@ running `wrangler dev`.
 So you can ask Claude *"what did Priya commit to in the roadmap sync?"* or
 *"search every meeting for what we decided about latency."*
 
+### Filing meetings into Notion
+
+Settings takes an internal integration secret (notion.so/my-integrations) and
+then lists the databases that integration can see. **Notion only exposes what
+has been explicitly connected**, so if a database is missing, open it in Notion
+→ `⋯` → Connections → add the integration. That is nearly always the problem.
+
+Columns are filled only when the destination has one of the right name *and*
+the right type — `Date`, `Duration (min)`, `Attendees`, `Summary`,
+`Action items`. Anything else is left alone, and the whole meeting always goes
+into the page body, so exporting into a database that was not built for this
+still reads correctly.
+
+Two things the Notion API cannot do, worth knowing before you plan a layout:
+
+- `POST /v1/databases` takes no position, so a new database lands at the end of
+  its parent page.
+- `child_database` is not a creatable block type, so a **linked view cannot be
+  created programmatically**. Adding one is a manual `/linked view of database`
+  in Notion.
+
+A database created inline cannot be the target of a `link_to_page` block —
+that needs a full-page database — which is why the app files into a database
+page rather than an inline table.
+
 ---
 
 ## Tests
