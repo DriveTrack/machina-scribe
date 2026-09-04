@@ -155,6 +155,9 @@ final class RecordingSession {
             let transcriber = GeminiTranscriber(apiKey: key)
             let cache = ChunkCache(meeting: meeting)
             var chunks: [Chunk] = []
+            /// Whether a request has actually gone out yet, so pacing does not
+            /// delay a run that is only replaying cached parts.
+            var sentAnything = false
 
             for (n, piece) in pieces.enumerated() {
                 let label = pieces.count == 1 ? "" : " part \(n + 1) of \(pieces.count)"
@@ -168,16 +171,33 @@ final class RecordingSession {
                     continue
                 }
 
-                phase = .transcribing(step: "Transcribing\(label)")
-                let turns = try await transcriber.transcribe(fileURL: piece.url) { [weak self] wait, attempt in
+                // Space parts out rather than firing them back to back; the
+                // per-minute token budget is what a run of long chunks
+                // exhausts. Skipped before the first request, and skipped
+                // whenever the previous part came from cache.
+                if sentAnything {
+                    phase = .transcribing(step: "Pacing before\(label)")
+                    try await Task.sleep(for: GeminiTranscriber.pacingBetweenParts)
+                }
+
+                phase = .transcribing(step: "Uploading\(label)")
+                let turns = try await transcriber.transcribe(fileURL: piece.url) { [weak self] progress in
                     Task { @MainActor in
-                        self?.phase = .transcribing(
-                            step: "Rate limited — waiting \(Int(wait))s before retry \(attempt)\(label)"
-                        )
+                        switch progress {
+                        case .uploading:
+                            self?.phase = .transcribing(step: "Uploading\(label)")
+                        case .transcribing:
+                            self?.phase = .transcribing(step: "Transcribing\(label)")
+                        case .waiting(let seconds, let attempt, let total):
+                            self?.phase = .transcribing(
+                                step: "Rate limited — waiting \(Int(seconds))s, retry \(attempt) of \(total)\(label)"
+                            )
+                        }
                     }
                 }
                 cache.save(turns, at: n, offsetMs: piece.offsetMs)
                 chunks.append(Chunk(offsetMs: piece.offsetMs, turns: turns))
+                sentAnything = true
             }
 
             phase = .transcribing(step: "Matching speakers")

@@ -10,9 +10,22 @@ import ScribeCore
 struct GeminiTranscriber {
     static let model = "gemini-3.5-transcribe"
     /// The hard cap is 30 minutes with diarization on; stay clear of the edge.
-    static let maxChunkMs = 20 * 60 * 1_000
+    ///
+    /// Bigger chunks are better than smaller ones: every seam is a chance for
+    /// the same person to be re-identified as somebody new, so the fewer seams
+    /// a meeting has, the better it comes out.
+    static let maxChunkMs = 27 * 60 * 1_000
+
     /// Re-transcribed on both sides of a seam so speaker labels can be matched.
-    static let overlapMs = 40 * 1_000
+    ///
+    /// Two minutes rather than forty seconds. A speaker can only be carried
+    /// across a seam if they happen to talk inside the overlap, and in a real
+    /// conversation only one person is usually speaking in any given forty
+    /// seconds -- so everyone else was being re-identified as a new person at
+    /// every boundary. A three-person meeting came back with eight speakers.
+    /// The cost is re-transcribing two minutes per seam, which is cheap next
+    /// to hand-merging five phantom speakers.
+    static let overlapMs = 120 * 1_000
 
     private let apiKey: String
     private let session: URLSession
@@ -30,31 +43,51 @@ struct GeminiTranscriber {
     /// requests and hitting a per-minute limit partway through is ordinary,
     /// not exceptional. `onWait` reports the pause so the UI can say what is
     /// happening rather than appearing to hang.
+    /// What the transcriber is doing, so the UI can say so instead of showing
+    /// one stale line for minutes at a time.
+    enum Progress: Sendable {
+        case uploading
+        case transcribing
+        case waiting(seconds: TimeInterval, attempt: Int, of: Int)
+    }
+
     func transcribe(
         fileURL: URL,
         mimeType: String = "audio/mp4",
-        maxAttempts: Int = 5,
-        onWait: (@Sendable (TimeInterval, Int) -> Void)? = nil
+        maxAttempts: Int = 8,
+        report: (@Sendable (Progress) -> Void)? = nil
     ) async throws -> [Turn] {
         var attempt = 1
         while true {
             do {
+                report?(.uploading)
                 let uri = try await upload(fileURL: fileURL, mimeType: mimeType)
+                report?(.transcribing)
                 return try await requestTranscription(fileURI: uri, mimeType: mimeType)
             } catch let error as ScribeError {
                 guard case .rateLimited(let retryAfter, _) = error, attempt < maxAttempts else {
                     throw error
                 }
-                // Prefer the delay the API asked for; otherwise back off
-                // exponentially from 20s, capped so a stuck daily quota fails
-                // in minutes rather than hanging for an hour.
-                let wait = min(retryAfter ?? (20 * pow(2, Double(attempt - 1))), 180)
-                onWait?(wait, attempt)
+                // Prefer the delay the API asked for. Otherwise back off from
+                // 30s: a twenty-minute chunk is tens of thousands of audio
+                // tokens, so what usually runs out is the per-minute token
+                // budget, and that needs most of a minute to refill -- retrying
+                // sooner just spends another request to be told the same thing.
+                let wait = min(retryAfter ?? (30 * pow(1.8, Double(attempt - 1))), 300)
+                report?(.waiting(seconds: wait, attempt: attempt, of: maxAttempts))
                 try await Task.sleep(for: .seconds(wait))
                 attempt += 1
             }
         }
     }
+
+    /// Breathing room between parts of the same recording.
+    ///
+    /// Firing consecutive twenty-minute chunks back to back is what trips the
+    /// per-minute token limit in the first place. Pausing between them is
+    /// cheaper in wall-clock time than eating a 429 and its backoff on
+    /// every single part.
+    static let pacingBetweenParts: Duration = .seconds(45)
 
     // MARK: - Files API
 

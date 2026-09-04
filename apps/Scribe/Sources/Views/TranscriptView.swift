@@ -83,21 +83,75 @@ struct TranscriptView: View {
     }
 
     private var namingPrompt: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Unidentified voices")
                 .font(.headline)
-            Text("Tap one to name it. The name applies to every turn that voice takes.")
+            Text("A long meeting is transcribed in parts, and someone who stays quiet across a part boundary can come back as a new voice. Assigning one of these to a person you already named merges them — every turn moves across at once.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            FlowLayout(spacing: 8) {
-                ForEach(unnamedLabels, id: \.self) { label in
-                    Button(label) { naming = label; nameField = "" }
-                        .buttonStyle(.bordered)
+                .fixedSize(horizontal: false, vertical: true)
+
+            ForEach(unnamedLabels, id: \.self) { label in
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Text(label).font(.subheadline.weight(.semibold))
+                        Text(sample(for: label))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                        Spacer(minLength: 0)
+                        if audioURL != nil {
+                            Button {
+                                if let at = firstStart(of: label) { playback.play(fromMs: at) }
+                            } label: {
+                                Image(systemName: "play.circle")
+                            }
+                            .buttonStyle(.plain)
+                            .help("Hear this voice")
+                        }
+                    }
+                    FlowLayout(spacing: 6) {
+                        ForEach(knownNames, id: \.self) { person in
+                            Button(person) {
+                                Task { await assign(label: label, to: person) }
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                        }
+                        Button("Someone else…") { naming = label; nameField = "" }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                    }
                 }
+                .padding(.vertical, 4)
             }
         }
         .padding()
         .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    /// People already attached to a voice in this meeting -- the likely answers.
+    private var knownNames: [String] {
+        Array(Set(lines.filter { $0.speaker != $0.speakerLabel }.map(\.speaker))).sorted()
+    }
+
+    private func firstStart(of label: String) -> Int? {
+        lines.first { $0.speakerLabel == label }?.startMs
+    }
+
+    /// A few words this voice actually said, so it can be recognised without
+    /// scrolling to find it.
+    private func sample(for label: String) -> String {
+        guard let line = lines.first(where: { $0.speakerLabel == label && $0.text.count > 25 })
+                ?? lines.first(where: { $0.speakerLabel == label })
+        else { return "" }
+        return "“\(line.text.prefix(60))…”"
+    }
+
+    private func assign(label: String, to person: String) async {
+        try? await app.store?.nameSpeaker(meeting: meetingId, label: label, name: person)
+        await app.refreshPeople()
+        await load()
     }
 
     private func turn(_ group: [TranscriptLine]) -> some View {
