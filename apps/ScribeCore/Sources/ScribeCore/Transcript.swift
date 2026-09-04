@@ -42,12 +42,23 @@ public enum Transcript {
         return Int((seconds * 1000).rounded())
     }
 
-    /// `spk_1` is how the API labels voices; nobody wants to read that.
-    public static func displayLabel(for raw: String) -> String {
-        if let n = raw.split(separator: "_").last, let i = Int(n) {
-            return "Speaker \(i)"
+    /// Diarization labels its voices opaquely, and the exact spelling is not
+    /// something to rely on: the documented example is `spk_1`, while the live
+    /// API returns `spk:0`. Rather than parse either shape, number speakers by
+    /// the order they first talk -- which is both robust to the format and
+    /// friendlier than the API's internal indices, zero-based or otherwise.
+    public struct SpeakerNaming {
+        private var assigned: [String: String] = [:]
+
+        public init() {}
+
+        public mutating func label(for raw: String?) -> String {
+            let key = raw ?? "<unknown>"
+            if let existing = assigned[key] { return existing }
+            let fresh = "Speaker \(assigned.count + 1)"
+            assigned[key] = fresh
+            return fresh
         }
-        return raw
     }
 
     /// Collapse words into turns. A turn ends when the voice changes or when a
@@ -57,13 +68,14 @@ public enum Transcript {
     public static func turns(from words: [Word], maxGapMs: Int = 1_500) -> [Turn] {
         var result: [Turn] = []
         var buffer: [Word] = []
+        var naming = SpeakerNaming()
 
         func flush() {
             guard let first = buffer.first, let last = buffer.last else { return }
             let text = buffer.map(\.text).joined(separator: " ")
             result.append(
                 Turn(
-                    speaker: displayLabel(for: first.speaker ?? "Speaker 1"),
+                    speaker: naming.label(for: first.speaker),
                     startMs: first.startMs,
                     endMs: last.endMs,
                     text: normalizeSpacing(text)

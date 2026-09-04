@@ -65,9 +65,13 @@ def main(path):
     print(f"PASS  grouped into {len(grouped)} turns\n")
 
     print("--- transcript as the app would store it ---")
+    # Mirrors Transcript.SpeakerNaming: number by order of first appearance,
+    # because the label spelling ("spk:0" live, "spk_1" in the docs) and its
+    # base are both unreliable.
+    naming = {}
     for turn in grouped:
-        spk = turn[0][1] or "?"
-        label = f"Speaker {spk.split('_')[-1]}" if "_" in spk else spk
+        spk = turn[0][1] or "<unknown>"
+        label = naming.setdefault(spk, f"Speaker {len(naming) + 1}")
         stamp = turn[0][2] // 1000
         text = " ".join(w for w, _, _, _ in turn)
         for mark in [",", ".", "?", "!", ";", ":"]:

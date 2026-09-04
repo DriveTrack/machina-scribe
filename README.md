@@ -27,7 +27,9 @@ transcript. Instead:
 1. **During the meeting**, tapping a name records a *timestamp anchor* —
    "Jose, at 4:12". It does not cut the transcript anywhere.
 2. **On stop**, the recording goes to the unary model, which returns turns
-   labelled `spk_1`, `spk_2`… consistent across the whole recording.
+   labelled per voice, consistent across the whole recording. (The label
+   spelling is not contractual — the published example is `spk_1`, the live
+   API returns `spk:0` — so speakers are renumbered by who talks first.)
 3. **The anchor lands inside one of those turns**, which identifies that voice.
    Naming the voice names every turn it takes — before *and* after your tap.
 

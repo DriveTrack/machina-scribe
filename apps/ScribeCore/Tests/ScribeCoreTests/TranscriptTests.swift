@@ -14,11 +14,44 @@ struct ParsingTests {
         #expect(Transcript.millis(fromOffset: "") == nil)
     }
 
-    @Test("spk_N is rewritten into something a person can read")
+    @Test("speakers are numbered by who talks first, whatever the API calls them")
     func labels() {
-        #expect(Transcript.displayLabel(for: "spk_1") == "Speaker 1")
-        #expect(Transcript.displayLabel(for: "spk_12") == "Speaker 12")
-        #expect(Transcript.displayLabel(for: "narrator") == "narrator")
+        var naming = Transcript.SpeakerNaming()
+        // The live API returns "spk:0"; the published example says "spk_1".
+        // Neither spelling should reach a reader, and neither should leak a
+        // zero-based index into a name.
+        #expect(naming.label(for: "spk:0") == "Speaker 1")
+        #expect(naming.label(for: "spk:1") == "Speaker 2")
+        #expect(naming.label(for: "spk:0") == "Speaker 1")   // stable
+        #expect(naming.label(for: nil) == "Speaker 3")
+    }
+
+    @Test("the real wire format from gemini-3.5-transcribe parses")
+    func liveWireFormat() throws {
+        // Captured from an actual response, not the docs example.
+        let json = """
+        {
+          "steps": [{
+            "type": "model_output",
+            "content": [{
+              "type": "text",
+              "annotations": [
+                {"type":"word_info","text":"Let's","speaker":"spk:0","start_offset":"0.08s","end_offset":"0.36s"},
+                {"type":"word_info","text":"start","speaker":"spk:0","start_offset":"0.36s","end_offset":"0.60s"},
+                {"type":"word_info","text":"I","speaker":"spk:1","start_offset":"5.10s","end_offset":"5.28s"},
+                {"type":"word_info","text":"think","speaker":"spk:1","start_offset":"5.28s","end_offset":"5.52s"}
+              ]
+            }]
+          }]
+        }
+        """.data(using: .utf8)!
+
+        let turns = try GeminiTranscription.decode(json).turns()
+        #expect(turns.count == 2)
+        #expect(turns[0].speaker == "Speaker 1")
+        #expect(turns[1].speaker == "Speaker 2")
+        #expect(turns[0].text == "Let's start")
+        #expect(turns[1].startMs == 5_100)
     }
 
     @Test("word annotations become speaker-attributed turns")
