@@ -1,0 +1,11 @@
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/ActorIsolated.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/AnyHashableSendable.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/AsyncStream.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/AsyncThrowingStream.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/Internal/Locking.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/Internal/UncheckedBox.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/LockIsolated.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/MainSerialExecutor.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/Result.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/Task.swift
+/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-concurrency-extras/Sources/ConcurrencyExtras/UncheckedSendable.swift

@@ -219,6 +219,16 @@ final class ScribeStore {
             .value
     }
 
+    /// What went wrong with the live tags for a meeting: taps that matched no
+    /// turn, and voices that several different people were tagged into.
+    func tagProblems(meeting: UUID) async throws -> [TagProblem] {
+        struct Args: Encodable { let p_meeting_id: UUID }
+        return try await client
+            .rpc("tag_problems", params: Args(p_meeting_id: meeting))
+            .execute()
+            .value
+    }
+
     func people() async throws -> [Person] {
         try await client.from("people").select("id,name,note").order("name").execute().value
     }

@@ -1,0 +1,39 @@
+{
+  "" : {
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/ScribeCore-primary.dia",
+    "emit-module-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/ScribeCore-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/ScribeCore-primary-emit-module.dia",
+    "pch" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/ScribeCore-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/ScribeCore-primary.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/ScribeCore/Sources/ScribeCore/GeminiResponse.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.dia",
+    "index-unit-output-path" : "/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/GeminiResponse~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/ScribeCore/Sources/ScribeCore/Stitching.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.dia",
+    "index-unit-output-path" : "/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Stitching~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/ScribeCore/Sources/ScribeCore/Transcript.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.dia",
+    "index-unit-output-path" : "/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/ScribeCore.build/Debug/ScribeCore.build/Objects-normal/arm64/Transcript~partial.swiftmodule"
+  }
+}

@@ -20,4 +20,5 @@ run() { docker cp "$1" "$C:/tmp/x.sql" >/dev/null; docker exec "$C" psql -U post
 run supabase/local-tests/auth_shim.sql
 for m in supabase/migrations/*.sql; do echo "-- applying $m"; run "$m"; done
 run supabase/local-tests/transcript_logic_test.sql
+run supabase/local-tests/tag_problems_test.sql
 echo "OK"

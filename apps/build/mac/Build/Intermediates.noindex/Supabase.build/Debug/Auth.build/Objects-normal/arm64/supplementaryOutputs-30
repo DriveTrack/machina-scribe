@@ -1,0 +1,23 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/WebAuthn/AuthMFA+WebAuthn.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthMFA+WebAuthn.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthMFA+WebAuthn.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthMFA+WebAuthn.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthMFA+WebAuthn.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthMFA+WebAuthn.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/WebAuthn/WebAuthnAuthenticator.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnAuthenticator.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnAuthenticator.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnAuthenticator.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnAuthenticator.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnAuthenticator.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/WebAuthn/WebAuthnTypes.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnTypes.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnTypes.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnTypes.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnTypes.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/WebAuthnTypes.swiftdeps"
+  }
+}

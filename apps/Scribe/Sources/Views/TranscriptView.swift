@@ -9,13 +9,19 @@ struct TranscriptView: View {
 
     @Environment(AppState.self) private var app
     @State private var lines: [TranscriptLine] = []
+    @State private var problems: [TagProblem] = []
     @State private var naming: String?
     @State private var nameField = ""
     @State private var isLoading = true
+    @State private var audioURL: URL?
+    @State private var audioExpiry: Date?
+    @State private var playback = PlaybackController()
 
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 18) {
+                if !problems.isEmpty { problemsBanner }
+                if audioURL != nil { player }
                 if !unnamedLabels.isEmpty { namingPrompt }
 
                 ForEach(grouped, id: \.first!.idx) { group in
@@ -39,6 +45,7 @@ struct TranscriptView: View {
         }
         .navigationTitle("Transcript")
         .task { await load() }
+        .onDisappear { playback.stop() }
         .alert("Who is this?", isPresented: .constant(naming != nil)) {
             TextField("Name", text: $nameField)
             Button("Cancel", role: .cancel) { naming = nil; nameField = "" }
@@ -110,6 +117,89 @@ struct TranscriptView: View {
                 .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
         }
+        .padding(.vertical, 4)
+        .padding(.horizontal, 8)
+        .background(
+            isCurrentlyPlaying(group) ? Color.accentColor.opacity(0.12) : .clear,
+            in: RoundedRectangle(cornerRadius: 8)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            // Hearing the moment is the fastest way to place a voice.
+            guard audioURL != nil else { return }
+            playback.play(fromMs: group[0].startMs)
+        }
+    }
+
+    private func isCurrentlyPlaying(_ group: [TranscriptLine]) -> Bool {
+        guard playback.isPlaying, let last = group.last else { return false }
+        return playback.positionMs >= group[0].startMs && playback.positionMs <= last.endMs
+    }
+
+    /// Shown only while the recording is still inside its retention window.
+    private var player: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                Button {
+                    playback.togglePlay()
+                } label: {
+                    Image(systemName: playback.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                        .font(.title2)
+                }
+                .buttonStyle(.plain)
+
+                Text("Tap any line to hear it")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Button("Delete audio", role: .destructive) {
+                    app.archive.discard(meetingId)
+                    playback.stop()
+                    audioURL = nil
+                    audioExpiry = nil
+                }
+                .font(.caption)
+            }
+
+            if let audioExpiry {
+                Text("Audio kept until \(audioExpiry, format: .dateTime.weekday().hour().minute()), then deleted automatically.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    /// Tags that could not be applied. Saying nothing here would leave a
+    /// transcript looking confidently right while quietly missing a name.
+    private var problemsBanner: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Some tags didn't land", systemImage: "exclamationmark.triangle.fill")
+                .font(.headline)
+                .foregroundStyle(.orange)
+
+            ForEach(problems) { problem in
+                if problem.isConflict {
+                    Text("**\(problem.detail ?? "Several people")** were all tagged into one voice. Whoever was tapped most often won. Usually this means the transcriber heard them as the same speaker — check the lines below and correct the name if needed.")
+                        .font(.callout)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else {
+                    Text("**\(problem.detail ?? "A tag")** at \(stamp(problem.atMs ?? 0)) didn't line up with any speech, so that name wasn't applied. It usually means the tap fell in a silence.")
+                        .font(.callout)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .padding()
+        .background(.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func stamp(_ ms: Int) -> String {
+        let s = ms / 1000
+        return String(format: "%d:%02d", s / 60, s % 60)
     }
 
     private func isUnnamed(_ line: TranscriptLine) -> Bool {
@@ -121,6 +211,13 @@ struct TranscriptView: View {
     private func load() async {
         isLoading = true
         lines = (try? await app.store?.transcript(meeting: meetingId)) ?? []
+        problems = (try? await app.store?.tagProblems(meeting: meetingId)) ?? []
+
+        let archive = app.archive
+        audioURL = archive.url(for: meetingId)
+        audioExpiry = archive.expiry(for: meetingId)
+        if let audioURL { playback.load(audioURL) }
+
         isLoading = false
     }
 

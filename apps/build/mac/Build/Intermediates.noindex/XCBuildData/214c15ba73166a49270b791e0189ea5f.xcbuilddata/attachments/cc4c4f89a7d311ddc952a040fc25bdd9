@@ -1,0 +1,169 @@
+{
+  "" : {
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Scribe-macOS-primary.dia",
+    "emit-module-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Scribe-macOS-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Scribe-macOS-primary-emit-module.dia",
+    "pch" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Scribe-macOS-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Scribe-macOS-primary.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Audio/AudioChunker.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioChunker~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Audio/AudioRecorder.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AudioRecorder~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Audio/LiveTranscriber.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/LiveTranscriber~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Model/AppState.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/AppState~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Model/Models.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Models~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/ScribeApp.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeApp~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Services/GeminiTranscriber.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/GeminiTranscriber~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Services/Keychain.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/Keychain~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Services/RecordingSession.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordingSession~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Services/ScribeStore.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/ScribeStore~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Views/FlowLayout.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/FlowLayout~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Views/MeetingsView.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/MeetingsView~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Views/RecordView.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RecordView~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Views/RootView.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/RootView~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Views/SettingsView.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/Scribe/Sources/Views/TranscriptView.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.dia",
+    "index-unit-output-path" : "/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Scribe.build/Debug/Scribe-macOS.build/Objects-normal/arm64/TranscriptView~partial.swiftmodule"
+  }
+}

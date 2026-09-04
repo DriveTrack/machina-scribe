@@ -1,0 +1,65 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/Optional+withUnsafeBytes_boring.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Optional+withUnsafeBytes_boring.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Optional+withUnsafeBytes_boring.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Optional+withUnsafeBytes_boring.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Optional+withUnsafeBytes_boring.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Optional+withUnsafeBytes_boring.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/RNG_boring.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/RNG_boring.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/RNG_boring.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/RNG_boring.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/RNG_boring.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/RNG_boring.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/SafeCompare_boring.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare_boring.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare_boring.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare_boring.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare_boring.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare_boring.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/Zeroization_boring.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization_boring.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization_boring.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization_boring.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization_boring.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization_boring.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/_CryptoModuleAnchor.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/_CryptoModuleAnchor.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/_CryptoModuleAnchor.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/_CryptoModuleAnchor.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/_CryptoModuleAnchor.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/_CryptoModuleAnchor.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/PrettyBytes.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/PrettyBytes.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/PrettyBytes.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/PrettyBytes.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/PrettyBytes.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/PrettyBytes.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/SafeCompare.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SafeCompare.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/SecureBytes.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SecureBytes.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SecureBytes.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SecureBytes.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SecureBytes.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/SecureBytes.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-crypto/Sources/Crypto/Util/Zeroization.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-crypto.build/Debug/Crypto.build/Objects-normal/arm64/Zeroization.swiftdeps"
+  }
+}

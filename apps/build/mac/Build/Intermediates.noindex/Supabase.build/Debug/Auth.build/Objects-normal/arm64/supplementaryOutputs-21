@@ -1,0 +1,30 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/AuthAdmin.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdmin.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdmin.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdmin.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdmin.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdmin.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/AuthAdminOAuth.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdminOAuth.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdminOAuth.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdminOAuth.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdminOAuth.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthAdminOAuth.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/AuthClient.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClient.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClient.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClient.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClient.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClient.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/AuthClientConfiguration.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClientConfiguration.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClientConfiguration.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClientConfiguration.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClientConfiguration.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/AuthClientConfiguration.swiftdeps"
+  }
+}

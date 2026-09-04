@@ -36,7 +36,17 @@ struct MeetingsView: View {
         }
         .navigationTitle("Meetings")
         .refreshable { await load() }
-        .task { await load() }
+        // Keyed on the token so finishing a recording refreshes the list. On
+        // macOS the sidebar is built once with the window and would otherwise
+        // never reload.
+        .task(id: app.meetingsToken) { await load() }
+        .toolbar {
+            Button {
+                Task { await load() }
+            } label: {
+                Label("Refresh", systemImage: "arrow.clockwise")
+            }
+        }
     }
 
     private func row(_ meeting: Meeting) -> some View {

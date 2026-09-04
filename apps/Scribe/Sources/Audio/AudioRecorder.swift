@@ -92,6 +92,9 @@ final class AudioRecorder {
         }
 
         isRecording = true
+        // Recognition reports times relative to its own segment; this is how
+        // those become positions in the recording.
+        live.audioOffsetMs = { [weak writer] in writer?.elapsedMs ?? 0 }
         live.start()
         startTicking()
     }

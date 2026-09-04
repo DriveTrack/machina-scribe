@@ -1,0 +1,23 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/CallbackManager.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/ChannelEvent.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/ChannelStateManager.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.swiftdeps"
+  }
+}

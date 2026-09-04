@@ -1,0 +1,23 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/FixedWidthInteger+Random.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/FixedWidthInteger+Random.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/FixedWidthInteger+Random.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/FixedWidthInteger+Random.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/FixedWidthInteger+Random.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/FixedWidthInteger+Random.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/Helpers.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Helpers.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Helpers.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Helpers.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Helpers.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Helpers.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/JWK+RSA.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/JWK+RSA.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/JWK+RSA.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/JWK+RSA.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/JWK+RSA.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/JWK+RSA.swiftdeps"
+  }
+}

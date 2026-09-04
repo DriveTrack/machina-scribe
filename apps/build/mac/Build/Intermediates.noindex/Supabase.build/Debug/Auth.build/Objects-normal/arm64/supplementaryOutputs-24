@@ -1,0 +1,30 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/CodeVerifierStorage.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/CodeVerifierStorage.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/CodeVerifierStorage.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/CodeVerifierStorage.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/CodeVerifierStorage.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/CodeVerifierStorage.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/Constants.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Constants.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Constants.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Constants.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Constants.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Constants.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/Dependencies.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Dependencies.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Dependencies.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Dependencies.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Dependencies.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/Dependencies.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/Auth/Internal/EventEmitter.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/EventEmitter.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/EventEmitter.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/EventEmitter.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/EventEmitter.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/Auth.build/Objects-normal/arm64/EventEmitter.swiftdeps"
+  }
+}

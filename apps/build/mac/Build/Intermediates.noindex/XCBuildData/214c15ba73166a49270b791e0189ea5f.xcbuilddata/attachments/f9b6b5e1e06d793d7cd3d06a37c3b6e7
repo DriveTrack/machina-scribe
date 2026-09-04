@@ -1,0 +1,259 @@
+{
+  "" : {
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeV2-primary.dia",
+    "emit-module-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeV2-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeV2-primary-emit-module.dia",
+    "pch" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeV2-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeV2-primary.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/CallbackManager.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/CallbackManager~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/ChannelEvent.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelEvent~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/ChannelStateManager.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ChannelStateManager~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/ConnectionManager.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/ConnectionManager~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/Exports.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Exports~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/PostgresAction.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresAction~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/PostgresActionData.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PostgresActionData~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/PresenceAction.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PresenceAction~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/PushV2.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/PushV2~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeChannel+AsyncAwait.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+AsyncAwait~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeChannel+Status.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannel+Status~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeChannelV2.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeChannelV2~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeClient+HeartbeatStatus.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeClient+Status.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeClientV2.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeError.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeError~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeJoinConfig.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeJoinConfig~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeLifecycleManager.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeLifecycleManager~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeMessageV2.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeMessageV2~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimePostgresFilter.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilter~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimePostgresFilterValue.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimePostgresFilterValue~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeSerializer.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeSerializer~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/Types.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/Types~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/WebSocket/URLSessionWebSocket.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/URLSessionWebSocket~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/WebSocket/WebSocket.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.dia",
+    "index-unit-output-path" : "/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/WebSocket~partial.swiftmodule"
+  }
+}

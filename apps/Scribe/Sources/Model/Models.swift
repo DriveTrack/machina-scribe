@@ -64,3 +64,21 @@ struct LiveTag: Identifiable, Hashable, Sendable {
     var name: String
     var atMs: Int
 }
+
+/// A live tag that could not be applied cleanly.
+struct TagProblem: Codable, Identifiable, Hashable, Sendable {
+    /// "unmatched" — the tap matched no turn, so that name was never applied.
+    /// "conflict"  — several people were tagged into a single diarized voice.
+    var kind: String
+    var detail: String?
+    var atMs: Int?
+
+    var id: String { "\(kind)-\(detail ?? "")-\(atMs ?? -1)" }
+
+    enum CodingKeys: String, CodingKey {
+        case kind, detail
+        case atMs = "at_ms"
+    }
+
+    var isConflict: Bool { kind == "conflict" }
+}

@@ -26,7 +26,7 @@
 		<true/>
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Scribe records meetings so it can transcribe who said what. Audio is deleted as soon as the transcript comes back; it is never stored.</string>
+	<string>Scribe records meetings so it can transcribe who said what. Recordings stay on this device and are deleted automatically; how long they are kept is up to you in Settings.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Used only for the rough live preview shown while you record. Scribe requires on-device recognition, so despite the notice above, this audio is not sent to Apple. Declining only hides the preview.</string>
 	<key>UIBackgroundModes</key>

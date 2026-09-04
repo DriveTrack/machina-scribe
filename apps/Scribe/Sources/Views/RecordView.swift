@@ -8,6 +8,9 @@ struct RecordView: View {
     @State private var title = ""
     @State private var newName = ""
     @State private var showingAddPerson = false
+    /// Set when the name is being added for a line of preview text rather than
+    /// for whoever is talking right now.
+    @State private var pendingChunkMs: Int?
 
     private var session: RecordingSession? { app.session }
 
@@ -170,12 +173,13 @@ struct RecordView: View {
 
     // MARK: - Live preview
 
-    /// Rough, on-device, unsaved. Labelled as such so nobody mistakes it for
-    /// the speaker-attributed transcript that arrives after you stop.
+    /// Rough, on-device, unsaved -- but tappable. Each line carries the moment
+    /// it was spoken, so pointing at one attributes that stretch of the
+    /// meeting without having to catch the person mid-sentence.
     @ViewBuilder
     private var livePreview: some View {
         if let recorder = session?.recorder {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 6) {
                     Image(systemName: "waveform")
                     Text("Live preview")
@@ -184,25 +188,40 @@ struct RecordView: View {
 
                 switch recorder.live.availability {
                 case .ready:
-                    Text(recorder.live.text.isEmpty ? "Listening…" : recorder.live.text)
-                        .font(.callout)
-                        .foregroundStyle(recorder.live.text.isEmpty ? .secondary : .primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .animation(.default, value: recorder.live.text)
+                    if recorder.live.isEmpty {
+                        Text("Listening…")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("Tap a line to say who said it.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+
+                        ForEach(recorder.live.chunks) { chunk in
+                            chunkRow(chunk)
+                        }
+
+                        if !recorder.live.pending.isEmpty {
+                            // Still being recognised, so its position is not
+                            // settled yet; shown, but not offered for tagging.
+                            Text(recorder.live.pending)
+                                .font(.callout)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
                     Text("Rough and speakerless. The saved transcript is transcribed properly, with names, when you stop.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
 
                 case .denied:
-                    Text("Speech recognition permission was declined, so there's no live preview. Recording and the final transcript are unaffected.")
+                    Text("Speech recognition permission was declined, so there's no live preview to tag. Use the names above instead — recording and the final transcript are unaffected.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
 
                 case .unavailableOnDevice:
-                    Text("This device can't transcribe on-device for your language, so the live preview is off — sending the audio to Apple to preview it isn't worth it. Recording and the final transcript are unaffected.")
+                    Text("This device can't transcribe on-device for your language, so the live preview is off — sending the audio to Apple to preview it isn't worth it. Use the names above; recording and the final transcript are unaffected.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -211,6 +230,47 @@ struct RecordView: View {
             .padding()
             .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
         }
+    }
+
+    /// One tappable line of preview. A menu rather than a sheet: naming should
+    /// cost one tap and a pick, not a modal, in the middle of a conversation.
+    private func chunkRow(_ chunk: LiveTranscriber.Chunk) -> some View {
+        let tagged = session?.taggedName(from: chunk.startMs, to: chunk.endMs)
+
+        return Menu {
+            ForEach(app.people) { person in
+                Button(person.name) { session?.tag(person.name, atMs: chunk.startMs) }
+            }
+            Divider()
+            Button("Someone else…") {
+                pendingChunkMs = chunk.startMs
+                showingAddPerson = true
+            }
+        } label: {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                if let tagged {
+                    Text(tagged)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Color.accentColor)
+                }
+                Text(chunk.text)
+                    .font(.callout)
+                    .foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                tagged == nil ? Color.clear : Color.accentColor.opacity(0.12),
+                in: RoundedRectangle(cornerRadius: 8)
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 8))
+        }
+        .menuStyle(.borderlessButton)
+        .buttonStyle(.plain)
     }
 
     private func stamp(_ ms: Int) -> String {

@@ -1,0 +1,109 @@
+{
+  "" : {
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPTypes-primary.dia",
+    "emit-module-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPTypes-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPTypes-primary-emit-module.dia",
+    "pch" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPTypes-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPTypes-primary.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTP2ErrorCode.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP2ErrorCode~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTP3ErrorCode.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTP3ErrorCode~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPField.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPField~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPFieldName.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldName~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPFieldValue.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFieldValue~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPFields.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPFields~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPParsedFields.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPParsedFields~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPRequest+URL.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest+URL~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPRequest.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPRequest~partial.swiftmodule"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/swift-http-types/Sources/HTTPTypes/HTTPResponse.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.dia",
+    "index-unit-output-path" : "/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.o",
+    "llvm-bc" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.bc",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse.swiftdeps",
+    "swiftmodule" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/swift-http-types.build/Debug/HTTPTypes.build/Objects-normal/arm64/HTTPResponse~partial.swiftmodule"
+  }
+}

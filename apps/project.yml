@@ -37,8 +37,9 @@ targets:
       properties:
         CFBundleDisplayName: Scribe
         NSMicrophoneUsageDescription: >-
-          Scribe records meetings so it can transcribe who said what. Audio is
-          deleted as soon as the transcript comes back; it is never stored.
+          Scribe records meetings so it can transcribe who said what. Recordings
+          stay on this device and are deleted automatically; how long they are
+          kept is up to you in Settings.
         NSSpeechRecognitionUsageDescription: >-
           Used only for the rough live preview shown while you record. Scribe
           requires on-device recognition, so despite the notice above, this
@@ -75,10 +76,15 @@ targets:
       properties:
         CFBundleDisplayName: Scribe
         NSMicrophoneUsageDescription: >-
-          Scribe records meetings so it can transcribe who said what. Audio is
-          deleted as soon as the transcript comes back; it is never stored.
+          Scribe records meetings so it can transcribe who said what. Recordings
+          stay on this device and are deleted automatically; how long they are
+          kept is up to you in Settings.
         NSSpeechRecognitionUsageDescription: >-
           Used only for the rough live preview shown while you record. Scribe
           requires on-device recognition, so despite the notice above, this
           audio is not sent to Apple. Declining only hides the preview.
         LSMinimumSystemVersion: "14.0"
+        # Same as the iOS target: reach the local Supabase over plain HTTP.
+        # Permits local/link-local addresses only, not the public internet.
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true

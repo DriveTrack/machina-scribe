@@ -21,6 +21,20 @@ final class AppState {
     var signedIn = false
     var people: [Person] = []
 
+    /// Bumped whenever the meeting list changes. The macOS sidebar is built
+    /// once when the window opens, so without this it never learns that a
+    /// recording finished and stays stuck on "No meetings yet".
+    private(set) var meetingsToken = UUID()
+
+    /// How long finished recordings are kept so voices can be identified by
+    /// ear afterwards. Zero keeps none.
+    var keepAudioHours: Int {
+        didSet {
+            UserDefaults.standard.set(keepAudioHours, forKey: "keepAudioHours")
+            applyRetention()
+        }
+    }
+
     /// Mirrors the keychain. Kept as stored state because the keychain itself
     /// is invisible to observation -- reading it in a computed property means
     /// views never learn that a key was added, and the record button stays
@@ -31,7 +45,22 @@ final class AppState {
         supabaseURL = UserDefaults.standard.string(forKey: "supabaseURL") ?? ""
         supabaseAnonKey = UserDefaults.standard.string(forKey: "supabaseAnonKey") ?? ""
         hasGeminiKey = Keychain.get("gemini")?.isEmpty == false
+        keepAudioHours = UserDefaults.standard.object(forKey: "keepAudioHours") as? Int ?? 24
         rebuild()
+        applyRetention()
+    }
+
+    func meetingsDidChange() { meetingsToken = UUID() }
+
+    var archive: RecordingArchive {
+        RecordingArchive(retention: .seconds(keepAudioHours * 3600))
+    }
+
+    /// Push the current setting down, and sweep anything already past its
+    /// window -- including everything, when retention has just been turned off.
+    private func applyRetention() {
+        session?.archive = archive
+        archive.purgeExpired()
     }
 
     func setGeminiKey(_ key: String) throws {
@@ -56,7 +85,10 @@ final class AppState {
         }
         let store = ScribeStore(url: url, anonKey: supabaseAnonKey)
         self.store = store
-        self.session = RecordingSession(store: store)
+        let session = RecordingSession(store: store)
+        session.archive = archive
+        session.onTranscriptSaved = { [weak self] in self?.meetingsDidChange() }
+        self.session = session
     }
 
     func refreshSession() async {

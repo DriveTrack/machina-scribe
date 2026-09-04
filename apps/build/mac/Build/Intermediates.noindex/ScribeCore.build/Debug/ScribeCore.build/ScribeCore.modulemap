@@ -1,0 +1,4 @@
+module ScribeCore {
+header "ScribeCore-Swift.h"
+export *
+}

@@ -20,6 +20,11 @@ final class RecordingSession {
     private(set) var meetingId: UUID?
 
     let recorder = AudioRecorder()
+    /// Recordings survive for a short window after the meeting so voices can
+    /// be identified by ear; the archive enforces the deletion.
+    var archive = RecordingArchive()
+    /// Fired once a transcript is stored, so lists can refresh themselves.
+    var onTranscriptSaved: (() -> Void)?
     private let store: ScribeStore
     /// Kept when transcription fails so the meeting can be retried rather than lost.
     private var pendingAudio: (url: URL, durationMs: Int)?
@@ -59,13 +64,24 @@ final class RecordingSession {
     /// after transcription the moment lands inside one diarized turn, which
     /// identifies that voice for the entire meeting.
     func tag(_ name: String) {
+        tag(name, atMs: recorder.currentOffsetMs)
+    }
+
+    /// Tag a moment that has already passed -- what tapping a line of the live
+    /// preview does. Pointing at text you can see beats catching someone
+    /// mid-sentence, and it removes the reaction lag that a live tap carries.
+    func tag(_ name: String, atMs: Int) {
         guard recorder.isRecording, let meeting = meetingId else { return }
-        let at = recorder.currentOffsetMs
-        tags.append(LiveTag(name: name, atMs: at))
+        tags.append(LiveTag(name: name, atMs: atMs))
 
         // Written through immediately: a tap that only lives in memory is lost
         // if the app is killed mid-meeting.
-        Task { try? await store.addLiveTag(meeting: meeting, name: name, atMs: at) }
+        Task { try? await store.addLiveTag(meeting: meeting, name: name, atMs: atMs) }
+    }
+
+    /// Who, if anyone, has been attributed to the moment this text covers.
+    func taggedName(from startMs: Int, to endMs: Int) -> String? {
+        tags.last { $0.atMs >= startMs && $0.atMs <= endMs }?.name
     }
 
     // MARK: - Finishing
@@ -115,8 +131,9 @@ final class RecordingSession {
             let named = try await store.saveTranscript(meeting: meeting, turns: stitched.turns)
             try await store.markReady(meeting)
 
-            discardAudio(audio.url, pieces: pieces)
+            keepOrDiscardAudio(audio.url, pieces: pieces, meeting: meeting)
             pendingAudio = nil
+            onTranscriptSaved?()
             phase = .finished(
                 meeting: meeting,
                 namedByTags: named,
@@ -130,13 +147,18 @@ final class RecordingSession {
         }
     }
 
-    /// The recording has done its job. We keep transcripts, not audio.
-    private func discardAudio(_ original: URL, pieces: [AudioChunker.Piece]) {
+    /// The transcript is stored, so the working files go.
+    ///
+    /// The chunks always go -- they are an implementation detail of getting
+    /// past the 30 minute diarization limit. The full recording is handed to
+    /// the archive, which keeps it only for its retention window and deletes it
+    /// outright when retention is off.
+    private func keepOrDiscardAudio(_ original: URL, pieces: [AudioChunker.Piece], meeting: UUID) {
         let fm = FileManager.default
         for piece in pieces where piece.url != original {
             try? fm.removeItem(at: piece.url)
         }
-        try? fm.removeItem(at: original)
+        archive.keep(original, for: meeting)
     }
 
     func reset() {

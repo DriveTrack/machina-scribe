@@ -1,0 +1,23 @@
+{
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeClient+HeartbeatStatus.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+HeartbeatStatus.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeClient+Status.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClient+Status.swiftdeps"
+  },
+  "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/SourcePackages/checkouts/supabase-swift/Sources/RealtimeV2/RealtimeClientV2.swift" : {
+    "const-values" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.swiftconstvalues",
+    "dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.d",
+    "diagnostics" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.dia",
+    "object" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.o",
+    "swift-dependencies" : "/Users/josecruzjaar/repos/machina-scribe/apps/build/mac/Build/Intermediates.noindex/Supabase.build/Debug/RealtimeV2.build/Objects-normal/arm64/RealtimeClientV2.swiftdeps"
+  }
+}
