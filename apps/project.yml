@@ -16,6 +16,9 @@ packages:
     from: "2.0.0"
   ScribeCore:
     path: ScribeCore
+  FluidAudio:
+    url: https://github.com/FluidInference/FluidAudio
+    from: "0.15.6"
 
 targets:
   Scribe-iOS:
@@ -29,6 +32,8 @@ targets:
         product: Supabase
       - package: ScribeCore
         product: ScribeCore
+      - package: FluidAudio
+        product: FluidAudio
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.machinascribe.Scribe
@@ -66,6 +71,8 @@ targets:
         product: Supabase
       - package: ScribeCore
         product: ScribeCore
+      - package: FluidAudio
+        product: FluidAudio
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.machinascribe.Scribe

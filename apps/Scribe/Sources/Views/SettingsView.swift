@@ -33,6 +33,26 @@ struct SettingsView: View {
             }
 
             Section {
+                Picker("Engine", selection: $app.transcriptionEngine) {
+                    ForEach(AppState.TranscriptionEngine.allCases) { engine in
+                        Text(engine.label).tag(engine)
+                    }
+                }
+                Text(app.transcriptionEngine.detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Transcription")
+            } footer: {
+                Text(
+                    "On-device transcription is free and never uploads the recording. "
+                    + "It works out who spoke here too, in one pass over the whole "
+                    + "meeting, so a long meeting cannot end up with more speakers "
+                    + "than there were people."
+                )
+            }
+
+            Section {
                 SecureField("API key", text: $geminiKey)
                 HStack {
                     // Bordered so it reads as a button; in a Form a plain one

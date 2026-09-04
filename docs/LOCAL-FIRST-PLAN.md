@@ -92,6 +92,55 @@ Gemini's 1473**. Apple's transcriber does not say who is speaking, so every
 27-turn wall of text is not a usable transcript. That is the whole reason phase
 2 exists, and it is why the engine is not yet selected anywhere in the app.
 
+### Speaker separation — FluidAudio `OfflineDiarizerManager`
+
+Apache 2.0 Swift package, CoreML on the Neural Engine: pyannote community-1
+segmentation, WeSpeaker embeddings, VBx clustering with PLDA. ~30 MB fetched
+once. Linked directly -- Humla shells out to a Swift sidecar only because their
+app is Rust, and we are already Swift.
+
+**Measured on the real 111-minute meeting, through the shipped code.** Four
+people were in it: Jose, Chris, Nia, Shania.
+
+| | Gemini (chunked) | Local, no roster | Local, pinned to 4 |
+|---|---|---|---|
+| speakers | **8** | 3 | **4** |
+| turns | 1471 | 596 | 659 |
+| wall clock | ~35 min | ~165 s | ~169 s |
+| cost | ~$1.30 | $0 | $0 |
+
+Gemini's eight speakers for four people is the bug in `STATUS.md`, and it is
+worse than the count alone suggests: **Jose came back as Speakers 1, 5 *and*
+7**, Shania as 4 and 6. Every seam between 27-minute chunks was a chance to
+re-identify whoever had been quiet across it. One pass over the whole recording
+has no seams.
+
+**Both error directions are real and they are opposite.** Chunked Gemini
+over-counts; whole-file clustering *under*-counts -- run without a roster the
+same audio came back as three, merging Nia and Shania. Pinning with
+`OfflineDiarizerConfig().withSpeakers(exactly:)` is what makes it exact, and we
+already collect that number: the tagging pad asks who is in the meeting before
+it starts. Humla has no roster and exposes a manual control instead. The pin is
+applied only when the roster holds more than one name.
+
+### Joining the two passes
+
+Transcription gives words with timings and no speaker; diarization gives
+speaker stretches and no words. `Diarization.assign` joins them on time:
+
+- **By word midpoint, not start.** A word straddling a boundary belongs to
+  whoever spoke most of it; using the start hands the first word of every turn
+  to the previous speaker.
+- **Words in a gap take the nearest segment.** Diarizers leave gaps -- one turn
+  in sixteen fell in one during testing. Leaving those unattributed splits a
+  turn at that point and reads as a phantom speaker change.
+- **The shortest covering segment wins.** Segments overlap, and a brief one
+  nested in a long one is the diarizer being specific. A unit test caught this
+  returning the container and discarding the interjection.
+- **Single-word flickers are absorbed.** A lone word carrying a neighbour's
+  voice mid-sentence with no pause either side is reassigned; a genuine
+  backchannel has pauses around it and survives.
+
 ### The memory budget comes first
 
 Jose runs Claude Code and two Docker Supabase stacks *during* meetings. Measured

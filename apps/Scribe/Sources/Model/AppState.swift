@@ -41,6 +41,45 @@ final class AppState {
     /// recording finished and stays stuck on "No meetings yet".
     private(set) var meetingsToken = UUID()
 
+    /// Which engine turns audio into words.
+    ///
+    /// On-device by default: it is free, it never uploads the meeting, it runs
+    /// on the Neural Engine rather than competing for memory, and on the one
+    /// long meeting we have both transcripts for it reached the same end
+    /// timestamp as Gemini. Gemini stays available for languages the device
+    /// cannot handle.
+    var transcriptionEngine: TranscriptionEngine {
+        didSet {
+            UserDefaults.standard.set(transcriptionEngine.rawValue, forKey: "transcriptionEngine")
+            // The session captures the engine when it is built, so it has to be
+            // rebuilt for a change here to take effect.
+            rebuild()
+        }
+    }
+
+    enum TranscriptionEngine: String, CaseIterable, Identifiable, Sendable {
+        case onDevice
+        case gemini
+
+        public var id: String { rawValue }
+
+        var label: String {
+            switch self {
+            case .onDevice: "On this device"
+            case .gemini: "Gemini"
+            }
+        }
+
+        var detail: String {
+            switch self {
+            case .onDevice:
+                "Free and private. Nothing is uploaded, and speakers are worked out here too."
+            case .gemini:
+                "Uploads the recording. Costs about $1.30 for a two-hour meeting."
+            }
+        }
+    }
+
     /// Which model writes the summaries. Cost differs sixfold; quality is a
     /// judgement only the reader can make, so it is a setting.
     var summaryModel: Summarizer.Model {
@@ -84,6 +123,8 @@ final class AppState {
         keepAudioHours = UserDefaults.standard.object(forKey: "keepAudioHours") as? Int ?? 24
         summaryModel = UserDefaults.standard.string(forKey: "summaryModel")
             .flatMap(Summarizer.Model.init(rawValue:)) ?? .flashLite
+        transcriptionEngine = UserDefaults.standard.string(forKey: "transcriptionEngine")
+            .flatMap(TranscriptionEngine.init(rawValue:)) ?? .onDevice
         notionDestination = UserDefaults.standard.data(forKey: "notionDestination")
             .flatMap { try? JSONDecoder().decode(NotionExporter.Destination.self, from: $0) }
         hasNotionKey = Keychain.get("notion")?.isEmpty == false
@@ -139,6 +180,23 @@ final class AppState {
         !supabaseURL.isEmpty && !supabaseAnonKey.isEmpty && URL(string: supabaseURL) != nil
     }
 
+    /// Whether a recording could actually be transcribed if one started now.
+    ///
+    /// On-device needs nothing bought or pasted, which is most of the point:
+    /// the old first-run cliff was being told to go and get an API key before
+    /// the app would record at all.
+    var canTranscribe: Bool {
+        switch transcriptionEngine {
+        case .onDevice: true
+        case .gemini: hasGeminiKey
+        }
+    }
+
+    /// Why recording is unavailable, or nil when it is fine.
+    var transcriptionBlocker: String? {
+        canTranscribe ? nil : "Add a Gemini API key in Settings, or switch to on-device transcription."
+    }
+
     private func rebuild() {
         guard isConfigured, let url = URL(string: supabaseURL) else {
             store = nil
@@ -147,7 +205,7 @@ final class AppState {
         }
         let store = ScribeStore(url: url, anonKey: supabaseAnonKey)
         self.store = store
-        let session = RecordingSession(store: store)
+        let session = RecordingSession(store: store, engine: transcriptionEngine)
         session.archive = archive
         session.onTranscriptSaved = { [weak self] in self?.meetingsDidChange() }
         self.session = session
