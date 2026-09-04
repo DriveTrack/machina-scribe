@@ -55,6 +55,8 @@ enum ScribeError: LocalizedError {
     case http(Int, String)
     case transcription(String)
     case audio(String)
+    /// 429/503 from Gemini. Carries the wait the service asked for, if any.
+    case rateLimited(retryAfter: TimeInterval?, detail: String)
 
     var errorDescription: String? {
         switch self {
@@ -64,6 +66,8 @@ enum ScribeError: LocalizedError {
             "Gemini returned \(code). \(body.prefix(300))"
         case .transcription(let m): m
         case .audio(let m):         "Audio error: \(m)"
+        case .rateLimited(_, let detail):
+            "Gemini is rate limiting this key. \(detail)"
         }
     }
 }

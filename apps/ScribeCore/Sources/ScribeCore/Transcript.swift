@@ -17,7 +17,7 @@ public struct Word: Equatable, Sendable {
 }
 
 /// A run of speech by one voice: what actually gets stored as a segment.
-public struct Turn: Equatable, Sendable {
+public struct Turn: Codable, Equatable, Sendable {
     public var speaker: String
     public var startMs: Int
     public var endMs: Int

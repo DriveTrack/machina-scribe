@@ -107,13 +107,36 @@ final class RecordingSession {
             phase = .idle
             return
         }
-        pendingAudio = stopped
-        await transcribe(meeting: meeting, audio: stopped)
+        // Out of the OS temporary directory before anything else is attempted.
+        // Transcribing two hours of audio takes a while and can fail; the
+        // system is free to empty its temp directory in the meantime, and a
+        // meeting cannot be recorded again.
+        let safe = archive.stash(stopped.url, for: meeting)
+        pendingAudio = (safe, stopped.durationMs)
+        await transcribe(meeting: meeting, audio: (safe, stopped.durationMs))
     }
 
     func retry() async {
         guard let meeting = meetingId, let audio = pendingAudio else { return }
         await transcribe(meeting: meeting, audio: audio)
+    }
+
+    /// Pick a recording back up after the app was closed.
+    ///
+    /// A failure that happened last night should still be recoverable this
+    /// morning; without this the only path back was keeping the app open.
+    func resume(meeting: UUID, durationMs: Int) async {
+        guard let url = archive.pendingURL(for: meeting) else { return }
+        meetingId = meeting
+        pendingAudio = (url, durationMs)
+        await transcribe(meeting: meeting, audio: (url, durationMs))
+    }
+
+    /// Give up on a recording and delete it.
+    func abandon(meeting: UUID) {
+        ChunkCache(meeting: meeting).clear()
+        archive.discardPending(meeting)
+        pendingAudio = nil
     }
 
     private func transcribe(meeting: UUID, audio: (url: URL, durationMs: Int)) async {
@@ -130,14 +153,30 @@ final class RecordingSession {
             let pieces = try await AudioChunker.split(audio.url)
 
             let transcriber = GeminiTranscriber(apiKey: key)
+            let cache = ChunkCache(meeting: meeting)
             var chunks: [Chunk] = []
+
             for (n, piece) in pieces.enumerated() {
-                phase = .transcribing(
-                    step: pieces.count == 1
-                        ? "Transcribing"
-                        : "Transcribing part \(n + 1) of \(pieces.count)"
-                )
-                let turns = try await transcriber.transcribe(fileURL: piece.url)
+                let label = pieces.count == 1 ? "" : " part \(n + 1) of \(pieces.count)"
+
+                // A part already transcribed on an earlier attempt costs
+                // nothing to reuse, and re-sending it is what exhausts the
+                // quota that caused the failure in the first place.
+                if let done = cache.turns(at: n, offsetMs: piece.offsetMs) {
+                    phase = .transcribing(step: "Reusing\(label)")
+                    chunks.append(Chunk(offsetMs: piece.offsetMs, turns: done))
+                    continue
+                }
+
+                phase = .transcribing(step: "Transcribing\(label)")
+                let turns = try await transcriber.transcribe(fileURL: piece.url) { [weak self] wait, attempt in
+                    Task { @MainActor in
+                        self?.phase = .transcribing(
+                            step: "Rate limited — waiting \(Int(wait))s before retry \(attempt)\(label)"
+                        )
+                    }
+                }
+                cache.save(turns, at: n, offsetMs: piece.offsetMs)
                 chunks.append(Chunk(offsetMs: piece.offsetMs, turns: turns))
             }
 
@@ -147,6 +186,7 @@ final class RecordingSession {
             let named = try await store.saveTranscript(meeting: meeting, turns: stitched.turns)
             try await store.markReady(meeting)
 
+            cache.clear()
             keepOrDiscardAudio(audio.url, pieces: pieces, meeting: meeting)
             pendingAudio = nil
             onTranscriptSaved?()
@@ -156,8 +196,9 @@ final class RecordingSession {
                 unmatched: stitched.unmatchedLabels
             )
         } catch {
-            // The audio stays on disk so this can be retried; it is only ever
-            // in the temporary directory, and is removed once it succeeds.
+            // The recording is safe in the pending directory and the parts
+            // already transcribed are cached, so retrying resumes rather than
+            // starting over.
             try? await store.markFailed(meeting, error.localizedDescription)
             phase = .failed(error.localizedDescription)
         }
@@ -174,7 +215,8 @@ final class RecordingSession {
         for piece in pieces where piece.url != original {
             try? fm.removeItem(at: piece.url)
         }
-        archive.keep(original, for: meeting)
+        // The recording is no longer pending, so the retention setting decides.
+        archive.settle(meeting)
     }
 
     func reset() {

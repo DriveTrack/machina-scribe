@@ -36,6 +36,90 @@ struct RecordingArchive {
         directory?.appendingPathComponent("\(meeting.uuidString).m4a")
     }
 
+    /// Recordings that have not been transcribed yet.
+    ///
+    /// Separate from the retained ones because the retention window must not
+    /// apply to them: a recording still waiting on a transcript has to survive
+    /// regardless of whether the user keeps audio afterwards.
+    private var pendingDirectory: URL? {
+        guard let base = try? FileManager.default.url(
+            for: .applicationSupportDirectory, in: .userDomainMask,
+            appropriateFor: nil, create: true
+        ) else { return nil }
+        let dir = base.appendingPathComponent("PendingRecordings", isDirectory: true)
+        if !FileManager.default.fileExists(atPath: dir.path) {
+            try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        }
+        return dir
+    }
+
+    private func pendingLocation(_ meeting: UUID) -> URL? {
+        pendingDirectory?.appendingPathComponent("\(meeting.uuidString).m4a")
+    }
+
+    /// Move a just-finished recording out of the OS temporary directory.
+    ///
+    /// This happens the moment recording stops, before any transcription is
+    /// attempted. The temporary directory can be emptied by the system at any
+    /// time, so audio left there while a long transcription retries -- or
+    /// while the app is closed overnight after a failure -- is audio that can
+    /// silently disappear. There is no getting a meeting back.
+    @discardableResult
+    func stash(_ source: URL, for meeting: UUID) -> URL {
+        guard let destination = pendingLocation(meeting) else { return source }
+        try? FileManager.default.removeItem(at: destination)
+        do {
+            try FileManager.default.moveItem(at: source, to: destination)
+        } catch {
+            // Copy rather than give up: better two copies than none.
+            try? FileManager.default.copyItem(at: source, to: destination)
+            guard FileManager.default.fileExists(atPath: destination.path) else { return source }
+        }
+
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        var mutable = destination
+        try? mutable.setResourceValues(values)
+        return destination
+    }
+
+    /// The un-transcribed recording for a meeting, if one is waiting.
+    func pendingURL(for meeting: UUID) -> URL? {
+        guard let url = pendingLocation(meeting),
+              FileManager.default.fileExists(atPath: url.path)
+        else { return nil }
+        return url
+    }
+
+    /// Everything still waiting on a transcript, oldest first.
+    func pendingMeetings() -> [(meeting: UUID, url: URL, bytes: Int64)] {
+        guard let pendingDirectory,
+              let files = try? FileManager.default.contentsOfDirectory(
+                at: pendingDirectory, includingPropertiesForKeys: [.fileSizeKey, .creationDateKey]
+              )
+        else { return [] }
+        return files.compactMap { file in
+            guard let id = UUID(uuidString: file.deletingPathExtension().lastPathComponent) else { return nil }
+            let size = (try? file.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
+            return (id, file, Int64(size))
+        }
+    }
+
+    /// The transcript is stored, so the recording stops being pending and the
+    /// retention setting finally decides its fate.
+    func settle(_ meeting: UUID) {
+        guard let pending = pendingLocation(meeting),
+              FileManager.default.fileExists(atPath: pending.path)
+        else { return }
+
+        guard retention > .zero, let destination = location(meeting) else {
+            try? FileManager.default.removeItem(at: pending)
+            return
+        }
+        try? FileManager.default.removeItem(at: destination)
+        try? FileManager.default.moveItem(at: pending, to: destination)
+    }
+
     /// Move a finished recording into the archive. Returns false when nothing
     /// was kept, which is the correct outcome with retention switched off.
     @discardableResult
@@ -111,6 +195,12 @@ struct RecordingArchive {
                 try? FileManager.default.removeItem(at: file)
             }
         }
+    }
+
+    /// Discard a pending recording -- only when the user gives up on it.
+    func discardPending(_ meeting: UUID) {
+        guard let url = pendingLocation(meeting) else { return }
+        try? FileManager.default.removeItem(at: url)
     }
 
     /// Total bytes currently held, for showing in settings.

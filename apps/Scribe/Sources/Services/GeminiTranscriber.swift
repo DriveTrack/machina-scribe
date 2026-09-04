@@ -25,9 +25,35 @@ struct GeminiTranscriber {
 
     /// Upload one audio file and return its diarized turns, timed from the
     /// start of that file.
-    func transcribe(fileURL: URL, mimeType: String = "audio/mp4") async throws -> [Turn] {
-        let uri = try await upload(fileURL: fileURL, mimeType: mimeType)
-        return try await requestTranscription(fileURI: uri, mimeType: mimeType)
+    ///
+    /// Retries on rate limiting, because a long meeting is split into several
+    /// requests and hitting a per-minute limit partway through is ordinary,
+    /// not exceptional. `onWait` reports the pause so the UI can say what is
+    /// happening rather than appearing to hang.
+    func transcribe(
+        fileURL: URL,
+        mimeType: String = "audio/mp4",
+        maxAttempts: Int = 5,
+        onWait: (@Sendable (TimeInterval, Int) -> Void)? = nil
+    ) async throws -> [Turn] {
+        var attempt = 1
+        while true {
+            do {
+                let uri = try await upload(fileURL: fileURL, mimeType: mimeType)
+                return try await requestTranscription(fileURI: uri, mimeType: mimeType)
+            } catch let error as ScribeError {
+                guard case .rateLimited(let retryAfter, _) = error, attempt < maxAttempts else {
+                    throw error
+                }
+                // Prefer the delay the API asked for; otherwise back off
+                // exponentially from 20s, capped so a stuck daily quota fails
+                // in minutes rather than hanging for an hour.
+                let wait = min(retryAfter ?? (20 * pow(2, Double(attempt - 1))), 180)
+                onWait?(wait, attempt)
+                try await Task.sleep(for: .seconds(wait))
+                attempt += 1
+            }
+        }
     }
 
     // MARK: - Files API
@@ -140,7 +166,55 @@ struct GeminiTranscriber {
     private func check(_ response: URLResponse, _ body: Data) throws {
         guard let http = response as? HTTPURLResponse else { return }
         guard (200..<300).contains(http.statusCode) else {
+            if http.statusCode == 429 || http.statusCode == 503 {
+                throw ScribeError.rateLimited(
+                    retryAfter: Self.retryDelay(from: body, headers: http),
+                    detail: Self.reason(from: body)
+                )
+            }
             throw ScribeError.http(http.statusCode, String(decoding: body, as: UTF8.self))
         }
+    }
+
+    /// How long the API says to wait.
+    ///
+    /// Google returns a RetryInfo detail with a duration like "27s"; a
+    /// Retry-After header is the HTTP-standard fallback. Guessing a backoff
+    /// when the service has told you the answer just burns more quota.
+    static func retryDelay(from body: Data, headers: HTTPURLResponse?) -> TimeInterval? {
+        struct Envelope: Decodable {
+            struct Failure: Decodable {
+                struct Detail: Decodable {
+                    let type: String?
+                    let retryDelay: String?
+                    enum CodingKeys: String, CodingKey {
+                        case type = "@type"
+                        case retryDelay
+                    }
+                }
+                let details: [Detail]?
+            }
+            let error: Failure?
+        }
+        if let parsed = try? JSONDecoder().decode(Envelope.self, from: body),
+           let raw = parsed.error?.details?.compactMap(\.retryDelay).first,
+           raw.hasSuffix("s"),
+           let seconds = Double(raw.dropLast()) {
+            return seconds
+        }
+        if let header = headers?.value(forHTTPHeaderField: "Retry-After"),
+           let seconds = Double(header) {
+            return seconds
+        }
+        return nil
+    }
+
+    static func reason(from body: Data) -> String {
+        struct Envelope: Decodable {
+            struct Failure: Decodable { let message: String? }
+            let error: Failure?
+        }
+        return (try? JSONDecoder().decode(Envelope.self, from: body))?.error?.message
+            ?? String(decoding: body.prefix(200), as: UTF8.self)
     }
 }
