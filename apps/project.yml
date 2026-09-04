@@ -53,12 +53,6 @@ targets:
           requires on-device recognition, so despite the notice above, this
           audio is not sent to Apple. Declining only hides the preview.
         UIBackgroundModes: [audio]
-        # Lets the app talk to a Supabase running on this Mac over plain HTTP
-        # while the hosted project does not exist yet. This flag permits only
-        # local and link-local addresses -- it does not allow cleartext to the
-        # public internet. Safe to drop once you are on a https:// project.
-        NSAppTransportSecurity:
-          NSAllowsLocalNetworking: true
         UILaunchScreen: {}
 
   Scribe-macOS:
@@ -96,7 +90,3 @@ targets:
           requires on-device recognition, so despite the notice above, this
           audio is not sent to Apple. Declining only hides the preview.
         LSMinimumSystemVersion: "14.0"
-        # Same as the iOS target: reach the local Supabase over plain HTTP.
-        # Permits local/link-local addresses only, not the public internet.
-        NSAppTransportSecurity:
-          NSAllowsLocalNetworking: true

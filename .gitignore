@@ -28,3 +28,6 @@ apps/build/
 
 # local code-signing config
 apps/Local.xcconfig
+
+# local db snapshots
+backups/

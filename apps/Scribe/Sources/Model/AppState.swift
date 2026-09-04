@@ -9,6 +9,21 @@ import SwiftUI
 @MainActor
 @Observable
 final class AppState {
+
+    /// Where a fresh install points before anyone opens Settings.
+    ///
+    /// Both values are publishable by design -- the anon key authorises
+    /// nothing on its own, because every table is behind RLS keyed on
+    /// `auth.uid()`. Shipping them means the iPhone, which has no shell to
+    /// write defaults from, does not need either value typed in by hand.
+    ///
+    /// The legacy `anon` JWT rather than the newer `sb_publishable_` key:
+    /// supabase-swift is pinned at 2.x here and the JWT is the form it has
+    /// been exercised against. Swap once that is actually tested.
+    enum DefaultConnection {
+        static let url = "https://lclnwhbhoibnipcbgbpi.supabase.co"
+        static let anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjbG53aGJob2libmlwY2JnYnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1NDQ3MzQsImV4cCI6MjEwNDEyMDczNH0.Q0U13fDT76W5e_AYRyBqwNh_ADsNDNk2r38SFoku4Rk"
+    }
     var supabaseURL: String {
         didSet { UserDefaults.standard.set(supabaseURL, forKey: "supabaseURL"); rebuild() }
     }
@@ -58,8 +73,13 @@ final class AppState {
     private(set) var hasGeminiKey: Bool
 
     init() {
-        supabaseURL = UserDefaults.standard.string(forKey: "supabaseURL") ?? ""
-        supabaseAnonKey = UserDefaults.standard.string(forKey: "supabaseAnonKey") ?? ""
+        // Fall back to the shipped project rather than an empty string, so the
+        // first launch is already connected. A value the user has typed always
+        // wins -- this only fills the gap where there is nothing stored.
+        supabaseURL = UserDefaults.standard.string(forKey: "supabaseURL")
+            ?? DefaultConnection.url
+        supabaseAnonKey = UserDefaults.standard.string(forKey: "supabaseAnonKey")
+            ?? DefaultConnection.anonKey
         hasGeminiKey = Keychain.get("gemini")?.isEmpty == false
         keepAudioHours = UserDefaults.standard.object(forKey: "keepAudioHours") as? Int ?? 24
         summaryModel = UserDefaults.standard.string(forKey: "summaryModel")
