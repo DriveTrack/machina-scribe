@@ -1,4 +1,5 @@
 import SwiftUI
+import ScribeCore
 
 /// Reads the transcript, and lets any still-unnamed voice be named.
 ///

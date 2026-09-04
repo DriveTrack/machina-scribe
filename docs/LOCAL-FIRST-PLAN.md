@@ -176,45 +176,54 @@ On this machine that is the difference between working and glitching.
 FluidAudio's diarizer is ~30 MB of CoreML on the ANE and runs after stop, so it
 is not a concern either.
 
-### Summaries — a memory decision, not a quality one
+### Summaries — built, with one part untested
 
-My earlier reasoning was that Apple's 4,096-token window disqualifies it. The
-window is real and fixed, and your meeting is 6.9× it:
+Three engines behind `MeetingSummarizing`, chosen in Settings. On-device is the
+default; each degrades to the next rather than failing.
 
-```
-1473 turns | 92,209 chars | 111.1 minutes
-with speaker labels: ~112,800 chars ≈ 28,200 tokens
-```
+**On device (`FoundationModels`).** Free, offline, and it costs this app no
+memory — the model lives in a system process. The catch is a hard 4,096-token
+window shared by prompt, response and session history, against a 111-minute
+meeting of roughly 28,000 tokens.
 
-But "load a 4-bit 4B model in-process instead" is worse on *this* machine, and I
-had the priorities the wrong way round. Ranked by what actually matters here:
+So it maps and reduces, but extracts *structure* rather than prose. Prose-
+summarising each tenth of a meeting and gluing the paragraphs together is what
+loses the thread, because no step ever sees the meeting. Decisions and
+commitments are **local facts** — "Wilma will handle the alignment" is entirely
+present in the passage where it was said. Those facts then collapse to about
+1,500 tokens, which fits one call with room to write the overview once, over
+all of them. A window that trips a guardrail or overruns is skipped rather than
+failing the whole summary: meeting talk about people or money is exactly what
+trips a safety filter, and a summary with a gap beats no summary.
 
-| Option | App memory | Whole meeting at once? | Verdict |
-|---|---|---|---|
-| Apple `FoundationModels` | **~0** — system process, OS-shared | no, 4k window | **default** |
-| Ollama / LM Studio endpoint | 0 in-app; ~2.3 GB out-of-process, unloadable | yes | quality tier |
-| MLX Swift, in-process | 2.3–5 GB **held inside our app** | yes | not on this machine |
+**Local server.** Any OpenAI-compatible endpoint — Ollama, LM Studio,
+llama.cpp. A 4B model at 4-bit holds the whole meeting in one pass, so no
+map-reduce and nothing lost between windows. Out of process on purpose: those
+weights would otherwise stay resident in this app for as long as it is open.
+`isLocal` is false for a non-loopback host, so the UI cannot claim a meeting
+stayed put when it did not.
 
-In-process MLX is the worst of the three here: the weights sit in our address
-space for as long as the app is open, on a machine that is already swapping.
-Dropped as the default.
+**Gemini.** Unchanged, still selectable, and now honestly labelled as uploading
+the transcript.
 
-**And the 4k window is more workable than I implied**, if the map step extracts
-structure rather than prose:
+#### What is verified and what is not
 
-1. **Extract**, over ~3k-token windows with a fresh session each: decisions,
-   action items with owners, open questions — as `@Generable` structs. These are
-   *local* facts. A small model is fine at spotting "Wilma will handle the
-   alignment" in the passage where it was said; it does not need the arc.
-2. **Reduce** once. The extracted facts from a 111-minute meeting come to
-   roughly 1,500 tokens, which fits one 4k call with room for the narrative.
+| | Status |
+|---|---|
+| Window splitting, fact merging, reply parsing | **40 unit tests**, all passing |
+| Local-server path | **run end to end** against a stand-in server with the real 103,252-character transcript |
+| On-device path | **compiles only** |
 
-Prose-summarising each tenth of a meeting and stitching the prose is what loses
-the arc. Extracting facts and writing the narrative once does not.
+The local-server client was exercised with the messy shape a small model
+actually returns — a `<think>` block, a sentence of preamble, then fenced JSON —
+and parses it. An unreachable server reports "Is the server running?" rather
+than a decode error.
 
-Ollama stays as the quality tier precisely because it is *out of process*: it
-can be started for one summary and unloaded with `keep_alive: 0`, and if it dies
-it takes nothing with it.
+**The on-device summariser has never been run.** `SystemLanguageModel.default`
+reports `unavailable(appleIntelligenceNotEnabled)` on this machine, so there is
+no way to execute it here. The macros compile and the surrounding logic is
+tested, but the model's behaviour on a real meeting is unknown until Apple
+Intelligence is switched on in System Settings.
 
 ### Free 1.9 GB today
 

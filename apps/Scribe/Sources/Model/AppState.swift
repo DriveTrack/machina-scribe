@@ -125,6 +125,12 @@ final class AppState {
             .flatMap(Summarizer.Model.init(rawValue:)) ?? .flashLite
         transcriptionEngine = UserDefaults.standard.string(forKey: "transcriptionEngine")
             .flatMap(TranscriptionEngine.init(rawValue:)) ?? .onDevice
+        summaryEngine = UserDefaults.standard.string(forKey: "summaryEngine")
+            .flatMap(SummaryEngine.init(rawValue:)) ?? .onDevice
+        localSummaryEndpoint = UserDefaults.standard.string(forKey: "localSummaryEndpoint")
+            ?? LocalEndpointSummarizer.defaultEndpoint.absoluteString
+        localSummaryModel = UserDefaults.standard.string(forKey: "localSummaryModel")
+            ?? LocalEndpointSummarizer.defaultModel
         notionDestination = UserDefaults.standard.data(forKey: "notionDestination")
             .flatMap { try? JSONDecoder().decode(NotionExporter.Destination.self, from: $0) }
         hasNotionKey = Keychain.get("notion")?.isEmpty == false
@@ -172,8 +178,70 @@ final class AppState {
         Keychain.get("notion").map { NotionExporter(token: $0) }
     }
 
-    var summarizer: Summarizer? {
-        Keychain.get("gemini").map { Summarizer(apiKey: $0, model: summaryModel) }
+    /// Which model writes summaries. On-device first, because it is free and
+    /// the transcript never leaves -- but its availability is a system setting
+    /// we do not control, so this has to degrade rather than fail.
+    var summaryEngine: SummaryEngine {
+        didSet { UserDefaults.standard.set(summaryEngine.rawValue, forKey: "summaryEngine") }
+    }
+
+    enum SummaryEngine: String, CaseIterable, Identifiable, Sendable {
+        case onDevice
+        case localServer
+        case gemini
+
+        var id: String { rawValue }
+
+        var label: String {
+            switch self {
+            case .onDevice: "On this device"
+            case .localServer: "Local server (Ollama, LM Studio)"
+            case .gemini: "Gemini"
+            }
+        }
+
+        var detail: String {
+            switch self {
+            case .onDevice:
+                "Free, offline, and costs the app no memory. Needs Apple Intelligence switched on."
+            case .localServer:
+                "Free and offline, and sees the whole meeting at once. Needs a server running here."
+            case .gemini:
+                "Uploads the transcript to Google. About $0.006 a meeting."
+            }
+        }
+    }
+
+    /// Where the summariser at hand actually is, and why it might not work.
+    /// Nil when it is ready.
+    var summaryBlocker: String? {
+        switch summaryEngine {
+        case .onDevice: AppleSummarizer.availability
+        case .localServer: nil   // only discoverable by trying
+        case .gemini: hasGeminiKey ? nil : "Add a Gemini API key in Settings."
+        }
+    }
+
+    var summarizer: (any MeetingSummarizing)? {
+        switch summaryEngine {
+        case .onDevice:
+            return AppleSummarizer.availability == nil ? AppleSummarizer() : nil
+        case .localServer:
+            return LocalEndpointSummarizer(
+                endpoint: URL(string: localSummaryEndpoint) ?? LocalEndpointSummarizer.defaultEndpoint,
+                model: localSummaryModel
+            )
+        case .gemini:
+            return Keychain.get("gemini").map { Summarizer(apiKey: $0, model: summaryModel) }
+        }
+    }
+
+    var localSummaryEndpoint: String {
+        didSet { UserDefaults.standard.set(localSummaryEndpoint, forKey: "localSummaryEndpoint") }
+    }
+
+    var localSummaryModel: String {
+        didSet { UserDefaults.standard.set(localSummaryModel, forKey: "localSummaryModel") }
     }
 
     /// Nothing has to be configured any more -- the store is a local file.

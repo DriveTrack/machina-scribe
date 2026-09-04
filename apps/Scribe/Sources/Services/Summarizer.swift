@@ -1,40 +1,17 @@
 import Foundation
-
-/// The structured summary of a meeting.
-struct MeetingSummary: Codable, Hashable, Sendable {
-    struct ActionItem: Codable, Hashable, Sendable, Identifiable {
-        var task: String
-        /// Who took it on, when the transcript actually says. Never guessed.
-        var owner: String?
-        /// Whatever the transcript said about timing, in its own words
-        /// ("by Friday", "end of Q3") rather than a fabricated date.
-        var due: String?
-
-        var id: String { "\(task)-\(owner ?? "")" }
-    }
-
-    /// A few words naming what the meeting was actually about, used to replace
-    /// the date-only title a meeting starts life with.
-    var title: String
-    var summary: String
-    var topics: [String]
-    var decisions: [String]
-    var actionItems: [ActionItem]
-    var openQuestions: [String]
-
-    enum CodingKeys: String, CodingKey {
-        case title, summary, topics, decisions
-        case actionItems = "action_items"
-        case openQuestions = "open_questions"
-    }
-}
+import ScribeCore
 
 /// Turns a speaker-attributed transcript into something worth reading later.
 ///
 /// Summarising is a cheap, well-trodden task, so it runs on the low-cost Flash
 /// tier by default: a one-hour meeting costs well under a cent. The model is a
 /// setting because "good enough" is a judgement only the reader can make.
-struct Summarizer {
+struct Summarizer: MeetingSummarizing {
+
+    var label: String { model.label }
+    /// The transcript is uploaded to Google.
+    let isLocal = false
+
 
     enum Model: String, CaseIterable, Identifiable, Sendable {
         /// ~$0.006 for a one-hour meeting.

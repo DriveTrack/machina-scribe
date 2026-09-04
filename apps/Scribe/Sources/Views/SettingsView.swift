@@ -83,20 +83,64 @@ struct SettingsView: View {
             }
 
             Section {
-                Picker("Summaries written by", selection: Binding(
-                    get: { app.summaryModel },
-                    set: { app.summaryModel = $0 }
-                )) {
-                    ForEach(Summarizer.Model.allCases) { model in
-                        Text(model.label).tag(model)
+                Picker("Written by", selection: $app.summaryEngine) {
+                    ForEach(AppState.SummaryEngine.allCases) { engine in
+                        Text(engine.label).tag(engine)
+                    }
+                }
+                Text(app.summaryEngine.detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                if let blocker = app.summaryBlocker {
+                    Label(blocker, systemImage: "exclamationmark.triangle")
+                        .font(.footnote)
+                        .foregroundStyle(.orange)
+                }
+
+                switch app.summaryEngine {
+                case .onDevice:
+                    EmptyView()
+                case .localServer:
+                    TextField("Endpoint", text: $app.localSummaryEndpoint)
+                        #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        #endif
+                    TextField("Model", text: $app.localSummaryModel)
+                        #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        #endif
+                case .gemini:
+                    Picker("Model", selection: $app.summaryModel) {
+                        ForEach(Summarizer.Model.allCases) { model in
+                            Text(model.label).tag(model)
+                        }
                     }
                 }
             } header: {
                 Text("Summaries")
             } footer: {
-                Text(app.summaryModel == .flashLite
-                     ? "About half a cent for an hour-long meeting. Fine for most notes."
-                     : "About six times the cost — still pennies — and better at working out who committed to what.")
+                switch app.summaryEngine {
+                case .onDevice:
+                    Text(
+                        "Apple's built-in model. It reads the meeting in passages, pulls "
+                        + "out decisions and commitments, then writes the overview from "
+                        + "those — its context window is too small to hold a long meeting "
+                        + "in one go."
+                    )
+                case .localServer:
+                    Text(
+                        "Any OpenAI-compatible server on this machine. A 4B model at 4-bit "
+                        + "holds a two-hour meeting in one pass and uses about 2.5 GB while "
+                        + "it runs — which it only does when you ask for a summary."
+                    )
+                case .gemini:
+                    Text(app.summaryModel == .flashLite
+                         ? "About half a cent for an hour-long meeting. The transcript is uploaded to Google."
+                         : "About six times the cost — still pennies — and better at working out who committed to what. The transcript is uploaded to Google.")
+                }
             }
 
             Section {
