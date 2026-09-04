@@ -6,8 +6,8 @@ configFiles:
 options:
   bundleIdPrefix: com.machinascribe
   deploymentTarget:
-    iOS: "17.0"
-    macOS: "14.0"
+    iOS: "26.0"
+    macOS: "26.0"
   createIntermediateGroups: true
 
 packages:
@@ -89,4 +89,4 @@ targets:
           Used only for the rough live preview shown while you record. Scribe
           requires on-device recognition, so despite the notice above, this
           audio is not sent to Apple. Declining only hides the preview.
-        LSMinimumSystemVersion: "14.0"
+        LSMinimumSystemVersion: "26.0"

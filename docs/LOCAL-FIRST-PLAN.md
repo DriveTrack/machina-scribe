@@ -56,85 +56,41 @@ they don't have our 8-speakers-for-3-people problem.
 
 Everything below was run on this MacBook Pro today, not read off a doc page.
 
-### Transcription — Apple `SpeechAnalyzer` / `SpeechTranscriber`
+### Transcription — Apple `SpeechAnalyzer`
 
 Built into macOS 26. No download, no key, no third-party dependency.
 
-Measured on a 12.1 s clip containing "Jose", "Wilma" and "diarization":
+**Measured on the real 111-minute meeting**, through the actual
+`AppleSpeechTranscriber` written for phase 1 rather than a toy probe:
 
 ```
-audio: 12.1s | wall: 0.72s | RTFx: 17x
-timed runs: 39, first at 0.00s
-text: Okay, so the main thing we agreed today is that Jose will ship the local
-transcription path by Friday. Wilma is going to handle the diarization
-alignment, and we decided not to bump the deployment target until the beta.
+17,299 words in 119.17s        -> 56x realtime
+5.8s user CPU, 5% of one core  -> the work is on the ANE, not the CPU
+last word ends at 111m 8s      -> nothing truncated
 ```
 
-Verbatim correct, punctuated, capitalised, proper nouns intact, and **39
-word-level time ranges** via the `.audioTimeRange` attribute — which is exactly
-the input the diarization alignment needs. 30 locales supported; 9 English
-variants were already installed on this machine, so first run downloads nothing.
+Against the Gemini transcript already stored for the same recording:
 
-At 17× realtime *including* cold start, a 111-minute meeting transcribes in
-roughly 6 minutes of background work — against ~35 minutes of paced Gemini calls
-and $1.30 today.
+| | Gemini | On-device |
+|---|---|---|
+| characters | 92,105 | 89,915 (97.6%) |
+| last word | 111m 8s | 111m 8s |
+| wall clock | ~35 min, paced around rate limits | **119 s** |
+| cost | ~$1.30 | **$0** |
 
-### Speaker separation — FluidAudio `OfflineDiarizerManager`
+Same end timestamp, so the coverage is genuinely equivalent rather than
+truncated; the 2.4% character difference is punctuation and formatting, not
+lost speech. Seventeen times faster in wall clock, free, and at 5% CPU it
+leaves the machine alone.
 
-Apache 2.0 Swift package, CoreML on the Neural Engine, pyannote community-1
-segmentation + WeSpeaker embeddings + VBx clustering. ~30 MB of models, fetched
-once.
+Per-word timings arrive via the `.audioTimeRange` attribute, which is what the
+diarization alignment in phase 2 needs.
 
-Measured on a synthetic 92-second, 3-speaker, 16-turn meeting with known
-boundaries:
-
-```
-models loaded/compiled in 14.0s   (first run; 0.2s once cached)
-audio 92.0s | diarize wall 1.03s | RTFx 90x
-speakers found: 3 -> ["S1", "S2", "S3"]
-turns correct: 15/16
-```
-
-The single miss is a short turn whose midpoint landed in an unlabelled gap
-between segments — the alignment step needs a nearest-segment fallback, not a
-better model.
-
-At 90× realtime a 111-minute meeting diarizes in about **75 seconds**. Together
-with transcription that is under 8 minutes of free, offline background work for
-a meeting that costs $1.30 and ~35 minutes of paced API calls today.
-
-**The finding that matters.** Run unpinned, the same audio came back as **2
-speakers, not 3** — it merged the two female voices, one of whom only spoke
-twice. Under-counting is community-1's known failure mode and it is the mirror
-image of our current bug: chunked Gemini over-counts, whole-file clustering
-under-counts.
-
-Pinning the count fixes it exactly:
-
-```swift
-OfflineDiarizerConfig().withSpeakers(exactly: attendees.count)
-```
-
-**And we already know that number.** `RecordingSession.attendees` is filled in
-before the meeting starts, because our tagging pad needs it — Humla has no
-equivalent and has to expose a manual `--num-speakers` flag instead. The roster
-we built for tagging turns out to be the input that makes local diarization
-reliable. Pin when the roster is non-empty, fall back to automatic when it is
-not, and let a late arrival re-run the pass with a higher count.
-
-Note the honest caveat: synthetic `say` voices are harder than real people in
-one respect (two voices from one synth family are unnaturally alike) and much
-easier in another (no crosstalk, no room noise). This needs re-measuring on the
-real 111-minute recording before the numbers above are load-bearing.
-
-Humla wraps FluidAudio in a Swift *sidecar* only because their app is
-Rust/Tauri and the Rust bindings are stubs. **We are already a native Swift
-app, so we link it directly** — no sidecar, no JSON-over-stdout, no process
-management. A genuine simplification we get for free by not being Tauri.
-
-Their pin is 0.7.0; current is 0.15.6, which adds the offline pipeline they
-describe plus Silero VAD and Parakeet ASR under one package. Note SwiftPM needs
-`// swift-tools-version:6.2` to declare `.macOS(.v26)` — 6.0 rejects it.
+**What phase 1 does not do:** the same run produced **27 turns, against
+Gemini's 1473**. Apple's transcriber does not say who is speaking, so every
+`Word` comes back with a nil speaker and turns can only be split on pauses. One
+27-turn wall of text is not a usable transcript. That is the whole reason phase
+2 exists, and it is why the engine is not yet selected anywhere in the app.
 
 ### The memory budget comes first
 

@@ -57,6 +57,16 @@ struct GeminiTranscriber {
         maxAttempts: Int = 8,
         report: (@Sendable (Progress) -> Void)? = nil
     ) async throws -> [Turn] {
+        Transcript.turns(from: try await transcribeWords(
+            fileURL: fileURL, mimeType: mimeType, maxAttempts: maxAttempts, report: report))
+    }
+
+    func transcribeWords(
+        fileURL: URL,
+        mimeType: String = "audio/mp4",
+        maxAttempts: Int = 8,
+        report: (@Sendable (Progress) -> Void)? = nil
+    ) async throws -> [Word] {
         var attempt = 1
         while true {
             do {
@@ -160,7 +170,7 @@ struct GeminiTranscriber {
 
     // MARK: - Transcription
 
-    private func requestTranscription(fileURI: String, mimeType: String) async throws -> [Turn] {
+    private func requestTranscription(fileURI: String, mimeType: String) async throws -> [Word] {
         var request = URLRequest(url: base.appending(path: "v1beta/interactions"))
         request.httpMethod = "POST"
         request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
@@ -187,13 +197,13 @@ struct GeminiTranscriber {
         try check(response, body)
 
         let parsed = try GeminiTranscription.decode(body)
-        let turns = parsed.turns()
-        guard !turns.isEmpty else {
+        let words = parsed.words
+        guard !words.isEmpty else {
             throw ScribeError.transcription(
                 "No speech was recognised in this recording."
             )
         }
-        return turns
+        return words
     }
 
     private func check(_ response: URLResponse, _ body: Data) throws {
@@ -249,5 +259,42 @@ struct GeminiTranscriber {
         }
         return (try? JSONDecoder().decode(Envelope.self, from: body))?.error?.message
             ?? String(decoding: body.prefix(200), as: UTF8.self)
+    }
+}
+
+
+// MARK: - AudioTranscriber
+
+extension GeminiTranscriber: AudioTranscriber {
+
+    /// Gemini caps diarization at 30 minutes, so anything longer has to be cut
+    /// into overlapping pieces and stitched back together.
+    var maxChunkMs: Int? { Self.maxChunkMs }
+
+    /// It diarizes, so `Word.speaker` arrives populated and no separate pass is
+    /// needed -- at the cost of that cap, and of a speaker only surviving a
+    /// seam if they happen to talk inside the overlap.
+    var identifiesSpeakers: Bool { true }
+
+    var label: String { "Gemini" }
+
+    func words(
+        in fileURL: URL,
+        report: (@Sendable (TranscriptionProgress) -> Void)? = nil
+    ) async throws -> [Word] {
+        try await transcribeWords(fileURL: fileURL) { progress in
+            report?(progress.asTranscriptionProgress)
+        }
+    }
+}
+
+private extension GeminiTranscriber.Progress {
+    var asTranscriptionProgress: TranscriptionProgress {
+        switch self {
+        case .uploading: .uploading
+        case .transcribing: .transcribing
+        case .waiting(let seconds, let attempt, let total):
+            .waiting(seconds: seconds, attempt: attempt, of: total)
+        }
     }
 }
