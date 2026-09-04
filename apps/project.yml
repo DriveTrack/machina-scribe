@@ -32,6 +32,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.machinascribe.Scribe
+        PRODUCT_NAME: Scribe
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "6.0"
@@ -42,6 +43,7 @@ targets:
       path: Scribe/Resources/Info-iOS.plist
       properties:
         CFBundleDisplayName: Scribe
+        CFBundleName: Scribe
         NSMicrophoneUsageDescription: >-
           Scribe records meetings so it can transcribe who said what. Recordings
           stay on this device and are deleted automatically; how long they are
@@ -73,6 +75,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.machinascribe.Scribe
+        PRODUCT_NAME: Scribe
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "6.0"
@@ -83,6 +86,7 @@ targets:
       path: Scribe/Resources/Info-macOS.plist
       properties:
         CFBundleDisplayName: Scribe
+        CFBundleName: Scribe
         NSMicrophoneUsageDescription: >-
           Scribe records meetings so it can transcribe who said what. Recordings
           stay on this device and are deleted automatically; how long they are
