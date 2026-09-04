@@ -2,11 +2,11 @@ import Foundation
 
 /// Pushes a finished meeting into a Notion database.
 ///
-/// Only the title property is written. Databases differ wildly in what columns
-/// they have, and guessing at them is how an export silently lands in the wrong
-/// field -- so everything else goes into the page body, where it always reads
-/// correctly. A date property is filled only when the database has exactly one,
-/// which is unambiguous.
+/// Columns are filled only when the destination actually has one of the right
+/// name *and* type. Guessing at unfamiliar columns is how an export lands
+/// silently in the wrong field, so anything unrecognised is left alone and the
+/// full content always goes into the page body, where it reads correctly
+/// regardless of how the database is set up.
 struct NotionExporter {
 
     struct Destination: Identifiable, Hashable, Sendable, Codable {
@@ -79,9 +79,8 @@ struct NotionExporter {
         return found
     }
 
-    /// The name of the destination's title column, plus a date column when
-    /// there is exactly one to be sure about.
-    private func schema(of destination: Destination) async throws -> (title: String, date: String?) {
+    /// What columns the destination actually has, keyed by name.
+    private func schema(of destination: Destination) async throws -> [String: String] {
         let path = destination.isDataSource
             ? "/v1/data_sources/\(destination.id)"
             : "/v1/databases/\(destination.id)"
@@ -91,13 +90,24 @@ struct NotionExporter {
             struct Property: Decodable { let type: String }
             let properties: [String: Property]
         }
-        let schema = try JSONDecoder().decode(Schema.self, from: data)
+        return try JSONDecoder().decode(Schema.self, from: data).properties.mapValues(\.type)
+    }
 
-        guard let title = schema.properties.first(where: { $0.value.type == "title" })?.key else {
-            throw ScribeError.transcription("That Notion database has no title column.")
+    /// Find a column by any of several likely names, but only accept it if the
+    /// type matches -- writing a date into a text column would fail the whole
+    /// request, and writing into a same-named column of the wrong meaning is
+    /// worse than writing nothing.
+    private func column(
+        _ columns: [String: String], named candidates: [String], type: String
+    ) -> String? {
+        for candidate in candidates {
+            if let match = columns.first(where: {
+                $0.key.caseInsensitiveCompare(candidate) == .orderedSame && $0.value == type
+            }) {
+                return match.key
+            }
         }
-        let dates = schema.properties.filter { $0.value.type == "date" }.map(\.key)
-        return (title, dates.count == 1 ? dates.first : nil)
+        return nil
     }
 
     // MARK: - Export
@@ -114,13 +124,36 @@ struct NotionExporter {
     ) async throws -> Result {
         let columns = try await schema(of: destination)
 
+        guard let titleColumn = columns.first(where: { $0.value == "title" })?.key else {
+            throw ScribeError.transcription("That Notion database has no title column.")
+        }
+
         var properties: [String: Any] = [
-            columns.title: ["title": [["text": ["content": title]]]]
+            titleColumn: ["title": [["text": ["content": title]]]]
         ]
-        if let dateColumn = columns.date {
-            properties[dateColumn] = [
-                "date": ["start": ISO8601DateFormatter().string(from: startedAt)]
+
+        if let date = column(columns, named: ["Date", "Meeting date", "When"], type: "date") {
+            properties[date] = ["date": ["start": ISO8601DateFormatter().string(from: startedAt)]]
+        }
+        if let minutes = column(columns, named: ["Duration (min)", "Duration", "Length"], type: "number"),
+           let durationMs {
+            properties[minutes] = ["number": max(1, durationMs / 60_000)]
+        }
+        if let who = column(columns, named: ["Attendees", "Speakers", "People"], type: "multi_select"),
+           !speakers.isEmpty {
+            properties[who] = ["multi_select": speakers.map { ["name": $0] }]
+        }
+        if let brief = column(columns, named: ["Summary", "Notes", "Overview"], type: "rich_text"),
+           let summary {
+            properties[brief] = [
+                "rich_text": [["text": ["content": String(summary.summary.prefix(1_900))]]]
             ]
+        }
+        if let count = column(columns, named: ["Action items", "Actions"], type: "number") {
+            properties[count] = ["number": summary?.actionItems.count ?? 0]
+        }
+        if let source = column(columns, named: ["Source", "Device"], type: "select") {
+            properties[source] = ["select": ["name": "Scribe"]]
         }
 
         let parent: [String: Any] = destination.isDataSource
