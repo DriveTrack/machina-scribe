@@ -40,7 +40,7 @@ struct RecordView: View {
 
     private var header: some View {
         VStack(spacing: 8) {
-            TextField("Meeting title", text: $title)
+            TextField(Meeting.dateTitle(), text: $title)
                 .textFieldStyle(.plain)
                 .font(.title2.weight(.semibold))
                 .multilineTextAlignment(.center)
@@ -92,7 +92,15 @@ struct RecordView: View {
                 .tint(.red)
             } else {
                 Button {
-                    Task { await session?.start(title: title.isEmpty ? nil : title, location: nil) }
+                    // Unnamed meetings are dated rather than "Untitled"; the
+                    // summary replaces this with what it was about.
+                    let chosen = title.trimmingCharacters(in: .whitespacesAndNewlines)
+                    Task {
+                        await session?.start(
+                            title: chosen.isEmpty ? Meeting.dateTitle() : chosen,
+                            location: nil
+                        )
+                    }
                 } label: {
                     Label("Start recording", systemImage: "mic.circle.fill")
                         .frame(maxWidth: .infinity)

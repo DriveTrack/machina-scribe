@@ -324,6 +324,11 @@ final class ScribeStore {
             .execute()
     }
 
+    func setTitle(meeting: UUID, title: String) async throws {
+        struct Patch: Encodable { let title: String }
+        try await client.from("meetings").update(Patch(title: title)).eq("id", value: meeting).execute()
+    }
+
     func setNotes(meeting: UUID, notes: String) async throws {
         struct Patch: Encodable { let notes: String }
         try await client.from("meetings").update(Patch(notes: notes)).eq("id", value: meeting).execute()

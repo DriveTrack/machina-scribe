@@ -340,10 +340,24 @@ struct TranscriptView: View {
             )
             try await app.store?.saveSummary(meeting: meetingId, result)
             summary = result
+            await applyGeneratedTitle(result)
             app.meetingsDidChange()
         } catch {
             failure = error.localizedDescription
         }
+    }
+
+    /// Put the date in front of the generated name: it keeps meetings sorting
+    /// chronologically in a list and in Notion, while still saying what the
+    /// meeting was. A title the user typed themselves is never overwritten.
+    private func applyGeneratedTitle(_ summary: MeetingSummary) async {
+        guard let meeting, meeting.hasOnlyDateTitle else { return }
+        let name = summary.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return }
+
+        let dated = "\(Meeting.dateTitle(for: meeting.startedAt)) — \(name)"
+        try? await app.store?.setTitle(meeting: meetingId, title: dated)
+        self.meeting?.title = dated
     }
 
     private func sendToNotion() async {

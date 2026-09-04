@@ -23,6 +23,22 @@ struct Meeting: Codable, Identifiable, Hashable, Sendable {
     }
 
     var displayTitle: String { title?.isEmpty == false ? title! : "Untitled meeting" }
+
+    /// A meeting is named by its date until a summary can say what it was
+    /// about. Sortable, and never leaves a list of "Untitled".
+    static func dateTitle(for date: Date = Date()) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let parts = calendar.dateComponents([.year, .month, .day], from: date)
+        return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
+    }
+
+    /// True when nothing but the automatic date is in the title, so replacing
+    /// it will not throw away something the user typed.
+    var hasOnlyDateTitle: Bool {
+        guard let title, !title.isEmpty else { return true }
+        return title.wholeMatch(of: /\d{4}-\d{2}-\d{2}/) != nil
+    }
 }
 
 struct Person: Codable, Identifiable, Hashable, Sendable {

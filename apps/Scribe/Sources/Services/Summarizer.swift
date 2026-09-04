@@ -13,6 +13,9 @@ struct MeetingSummary: Codable, Hashable, Sendable {
         var id: String { "\(task)-\(owner ?? "")" }
     }
 
+    /// A few words naming what the meeting was actually about, used to replace
+    /// the date-only title a meeting starts life with.
+    var title: String
     var summary: String
     var topics: [String]
     var decisions: [String]
@@ -20,7 +23,7 @@ struct MeetingSummary: Codable, Hashable, Sendable {
     var openQuestions: [String]
 
     enum CodingKeys: String, CodingKey {
-        case summary, topics, decisions
+        case title, summary, topics, decisions
         case actionItems = "action_items"
         case openQuestions = "open_questions"
     }
@@ -65,6 +68,10 @@ struct Summarizer {
         [
             "type": "object",
             "properties": [
+                "title": [
+                    "type": "string",
+                    "description": "Three to six words naming what this meeting was about. No date, no the word 'meeting', no trailing punctuation."
+                ],
                 "summary": [
                     "type": "string",
                     "description": "Two or three sentences on what this meeting was for and where it landed."
@@ -94,7 +101,7 @@ struct Summarizer {
                     "description": "Raised but unresolved."
                 ]
             ],
-            "required": ["summary", "topics", "decisions", "action_items", "open_questions"]
+            "required": ["title", "summary", "topics", "decisions", "action_items", "open_questions"]
         ]
     }
 
@@ -115,6 +122,8 @@ struct Summarizer {
     it, return an empty list rather than padding it.
     - The transcript comes from automatic speech recognition, so expect \
     mis-heard words. Read through obvious errors rather than quoting them.
+    - The title should name the subject, not describe the artefact. "Q4 \
+    migration timing" is useful; "Meeting about the project" is not.
     """
 
     func summarize(title: String?, transcript: String, notes: String?) async throws -> MeetingSummary {
