@@ -5,8 +5,6 @@ struct SettingsView: View {
 
     @Environment(AppState.self) private var app
     @State private var geminiKey = ""
-    @State private var email = ""
-    @State private var password = ""
     @State private var message: String?
     @State private var busy = false
     @State private var heldBytes: Int64 = 0
@@ -19,17 +17,46 @@ struct SettingsView: View {
 
         Form {
             Section {
-                TextField("Project URL", text: $app.supabaseURL)
-                    .textContentType(.URL)
-                    #if os(iOS)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    #endif
-                SecureField("Anon / publishable key", text: $app.supabaseAnonKey)
+                LabeledContent("Meetings") {
+                    Text(app.storageDescription)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+                #if os(macOS)
+                HStack {
+                    Button("Show in Finder") { app.revealStore() }
+                    Button("Back up…") { backUp() }
+                }
+                #endif
             } header: {
-                Text("Supabase")
+                Text("Where your meetings live")
             } footer: {
-                Text("Both are safe to store on device. Find them under Project Settings → API.")
+                Text(
+                    "One file on this device. Nothing is uploaded and there is no "
+                    + "account. Use Back up… rather than copying the file by hand: "
+                    + "recent meetings can still be in the write-ahead log, and a "
+                    + "plain copy would leave them behind."
+                )
+            }
+
+            Section {
+                Picker("Engine", selection: $app.transcriptionEngine) {
+                    ForEach(AppState.TranscriptionEngine.allCases) { engine in
+                        Text(engine.label).tag(engine)
+                    }
+                }
+                Text(app.transcriptionEngine.detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Transcription")
+            } footer: {
+                Text(
+                    "On-device transcription is free and never uploads the recording. "
+                    + "It works out who spoke here too, in one pass over the whole "
+                    + "meeting, so a long meeting cannot end up with more speakers "
+                    + "than there were people."
+                )
             }
 
             Section {
@@ -59,20 +86,64 @@ struct SettingsView: View {
             }
 
             Section {
-                Picker("Summaries written by", selection: Binding(
-                    get: { app.summaryModel },
-                    set: { app.summaryModel = $0 }
-                )) {
-                    ForEach(Summarizer.Model.allCases) { model in
-                        Text(model.label).tag(model)
+                Picker("Written by", selection: $app.summaryEngine) {
+                    ForEach(AppState.SummaryEngine.allCases) { engine in
+                        Text(engine.label).tag(engine)
+                    }
+                }
+                Text(app.summaryEngine.detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                if let blocker = app.summaryBlocker {
+                    Label(blocker, systemImage: "exclamationmark.triangle")
+                        .font(.footnote)
+                        .foregroundStyle(.orange)
+                }
+
+                switch app.summaryEngine {
+                case .onDevice:
+                    EmptyView()
+                case .localServer:
+                    TextField("Endpoint", text: $app.localSummaryEndpoint)
+                        #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        #endif
+                    TextField("Model", text: $app.localSummaryModel)
+                        #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        #endif
+                case .gemini:
+                    Picker("Model", selection: $app.summaryModel) {
+                        ForEach(Summarizer.Model.allCases) { model in
+                            Text(model.label).tag(model)
+                        }
                     }
                 }
             } header: {
                 Text("Summaries")
             } footer: {
-                Text(app.summaryModel == .flashLite
-                     ? "About half a cent for an hour-long meeting. Fine for most notes."
-                     : "About six times the cost — still pennies — and better at working out who committed to what.")
+                switch app.summaryEngine {
+                case .onDevice:
+                    Text(
+                        "Apple's built-in model. It reads the meeting in passages, pulls "
+                        + "out decisions and commitments, then writes the overview from "
+                        + "those — its context window is too small to hold a long meeting "
+                        + "in one go."
+                    )
+                case .localServer:
+                    Text(
+                        "Any OpenAI-compatible server on this machine. A 4B model at 4-bit "
+                        + "holds a two-hour meeting in one pass and uses about 2.5 GB while "
+                        + "it runs — which it only does when you ask for a summary."
+                    )
+                case .gemini:
+                    Text(app.summaryModel == .flashLite
+                         ? "About half a cent for an hour-long meeting. The transcript is uploaded to Google."
+                         : "About six times the cost — still pennies — and better at working out who committed to what. The transcript is uploaded to Google.")
+                }
             }
 
             Section {
@@ -143,38 +214,7 @@ struct SettingsView: View {
             } footer: {
                 Text(app.keepAudioHours == 0
                      ? "Audio is deleted the moment its transcript is stored. Transcripts are kept; recordings are not."
-                     : "Audio stays on this device only, so you can play a meeting back and work out who a voice was. It is deleted automatically once the window passes, and never uploaded anywhere except Google for transcription.")
-            }
-
-            Section("Account") {
-                if app.signedIn {
-                    Button("Sign out", role: .destructive) {
-                        Task {
-                            try? await app.store?.signOut()
-                            await app.refreshSession()
-                        }
-                    }
-                } else {
-                    TextField("Email", text: $email)
-                        #if os(iOS)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.emailAddress)
-                        #endif
-                    SecureField("Password", text: $password)
-                    HStack {
-                        Button("Sign in") { authenticate(signingUp: false) }
-                            .buttonStyle(.borderedProminent)
-                        Button("Create account") { authenticate(signingUp: true) }
-                            .buttonStyle(.bordered)
-                    }
-                    .disabled(busy || !app.isConfigured)
-
-                    Text("No account yet? Pick any email and password and choose Create account — this is your own database.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+                     : "Audio stays on this device only, so you can play a meeting back and work out who a voice was. It is deleted automatically once the window passes. With on-device transcription it is never uploaded at all.")
             }
 
             if let message {
@@ -227,6 +267,22 @@ struct SettingsView: View {
         }
     }
 
+    #if os(macOS)
+    private func backUp() {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "scribe-\(Meeting.dateTitle()).sqlite"
+        panel.allowedContentTypes = [.database]
+        panel.canCreateDirectories = true
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try app.store?.backup(to: url)
+            message = "Backed up to \(url.lastPathComponent)."
+        } catch {
+            message = error.localizedDescription
+        }
+    }
+    #endif
+
     private func saveKey() {
         do {
             try app.setGeminiKey(geminiKey.trimmingCharacters(in: .whitespaces))
@@ -237,25 +293,4 @@ struct SettingsView: View {
         }
     }
 
-    private func authenticate(signingUp: Bool) {
-        busy = true
-        message = nil
-        Task {
-            do {
-                if signingUp {
-                    try await app.store?.signUp(email: email, password: password)
-                } else {
-                    try await app.store?.signIn(email: email, password: password)
-                }
-                await app.refreshSession()
-                password = ""
-                if !app.signedIn {
-                    message = "Check your email to confirm the account, then sign in."
-                }
-            } catch {
-                message = error.localizedDescription
-            }
-            busy = false
-        }
-    }
 }

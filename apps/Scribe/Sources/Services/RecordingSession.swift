@@ -28,12 +28,19 @@ final class RecordingSession {
     var archive = RecordingArchive()
     /// Fired once a transcript is stored, so lists can refresh themselves.
     var onTranscriptSaved: (() -> Void)?
-    private let store: ScribeStore
+    private let store: LocalStore
+    /// Which engine to use. Read once when the session is built so a setting
+    /// changed mid-meeting cannot swap engines underneath a running recording.
+    private let engine: AppState.TranscriptionEngine
+    /// Held across meetings: the CoreML models cost ~14s to compile the first
+    /// time and ~0.2s afterwards.
+    private let diarizer = FluidDiarizer()
     /// Kept when transcription fails so the meeting can be retried rather than lost.
     private var pendingAudio: (url: URL, durationMs: Int)?
 
-    init(store: ScribeStore) {
+    init(store: LocalStore, engine: AppState.TranscriptionEngine = .onDevice) {
         self.store = store
+        self.engine = engine
     }
 
     var isRecording: Bool { recorder.isRecording }
@@ -140,103 +147,180 @@ final class RecordingSession {
     }
 
     private func transcribe(meeting: UUID, audio: (url: URL, durationMs: Int)) async {
-        guard let key = Keychain.get("gemini") else {
-            phase = .failed(ScribeError.missingAPIKey.localizedDescription)
-            return
-        }
-
         do {
             phase = .transcribing(step: "Saving meeting")
             try await store.markTranscribing(meeting, durationMs: audio.durationMs)
 
-            phase = .transcribing(step: "Preparing audio")
-            let pieces = try await AudioChunker.split(audio.url)
-
-            let transcriber = GeminiTranscriber(apiKey: key)
-            let cache = ChunkCache(meeting: meeting)
-            var chunks: [Chunk] = []
-            /// Whether a request has actually gone out yet, so pacing does not
-            /// delay a run that is only replaying cached parts.
-            var sentAnything = false
-
-            for (n, piece) in pieces.enumerated() {
-                let label = pieces.count == 1 ? "" : " part \(n + 1) of \(pieces.count)"
-
-                // A part already transcribed on an earlier attempt costs
-                // nothing to reuse, and re-sending it is what exhausts the
-                // quota that caused the failure in the first place.
-                if let done = cache.turns(at: n, offsetMs: piece.offsetMs) {
-                    phase = .transcribing(step: "Reusing\(label)")
-                    chunks.append(Chunk(offsetMs: piece.offsetMs, turns: done))
-                    continue
-                }
-
-                // Space parts out rather than firing them back to back; the
-                // per-minute token budget is what a run of long chunks
-                // exhausts. Skipped before the first request, and skipped
-                // whenever the previous part came from cache.
-                if sentAnything {
-                    phase = .transcribing(step: "Pacing before\(label)")
-                    try await Task.sleep(for: GeminiTranscriber.pacingBetweenParts)
-                }
-
-                phase = .transcribing(step: "Uploading\(label)")
-                let turns = try await transcriber.transcribe(fileURL: piece.url) { [weak self] progress in
-                    Task { @MainActor in
-                        switch progress {
-                        case .uploading:
-                            self?.phase = .transcribing(step: "Uploading\(label)")
-                        case .transcribing:
-                            self?.phase = .transcribing(step: "Transcribing\(label)")
-                        case .waiting(let seconds, let attempt, let total):
-                            self?.phase = .transcribing(
-                                step: "Rate limited — waiting \(Int(seconds))s, retry \(attempt) of \(total)\(label)"
-                            )
-                        }
-                    }
-                }
-                cache.save(turns, at: n, offsetMs: piece.offsetMs)
-                chunks.append(Chunk(offsetMs: piece.offsetMs, turns: turns))
-                sentAnything = true
+            let turns: [Turn]
+            let unmatched: [String]
+            switch engine {
+            case .onDevice:
+                turns = try await transcribeOnDevice(meeting: meeting, audio: audio)
+                unmatched = []
+            case .gemini:
+                (turns, unmatched) = try await transcribeWithGemini(meeting: meeting, audio: audio)
             }
 
-            phase = .transcribing(step: "Matching speakers")
-            let stitched = Stitcher.stitch(chunks, overlapMs: GeminiTranscriber.overlapMs)
-
-            let named = try await store.saveTranscript(meeting: meeting, turns: stitched.turns)
+            let named = try await store.saveTranscript(meeting: meeting, turns: turns)
             try await store.markReady(meeting)
 
-            cache.clear()
-            keepOrDiscardAudio(audio.url, pieces: pieces, meeting: meeting)
+            ChunkCache(meeting: meeting).clear()
+            archive.settle(meeting)
             pendingAudio = nil
             onTranscriptSaved?()
-            phase = .finished(
-                meeting: meeting,
-                namedByTags: named,
-                unmatched: stitched.unmatchedLabels
-            )
+            phase = .finished(meeting: meeting, namedByTags: named, unmatched: unmatched)
         } catch {
-            // The recording is safe in the pending directory and the parts
-            // already transcribed are cached, so retrying resumes rather than
-            // starting over.
+            // The recording is safe in the pending directory and, on the Gemini
+            // path, the parts already transcribed are cached -- so retrying
+            // resumes rather than starting over.
             try? await store.markFailed(meeting, error.localizedDescription)
             phase = .failed(error.localizedDescription)
         }
     }
 
-    /// The transcript is stored, so the working files go.
+    /// Transcribe and diarize here, with nothing uploaded and nothing charged.
     ///
-    /// The chunks always go -- they are an implementation detail of getting
-    /// past the 30 minute diarization limit. The full recording is handed to
-    /// the archive, which keeps it only for its retention window and deletes it
-    /// outright when retention is off.
-    private func keepOrDiscardAudio(_ original: URL, pieces: [AudioChunker.Piece], meeting: UUID) {
+    /// Two passes over the same recording, and keeping them separate is the
+    /// whole design. Transcription gives words with timings but no idea who
+    /// spoke; diarization gives speaker stretches but no words. Joining them on
+    /// time is exact, and -- unlike the chunked path below -- neither pass has a
+    /// length limit, so there are no seams for a speaker to be lost across.
+    private func transcribeOnDevice(
+        meeting: UUID,
+        audio: (url: URL, durationMs: Int)
+    ) async throws -> [Turn] {
+        let transcriber = AppleSpeechTranscriber()
+
+        phase = .transcribing(step: "Transcribing on this device")
+        let heard = try await transcriber.words(in: audio.url) { [weak self] progress in
+            Task { @MainActor in
+                guard case .progress(let fraction) = progress else { return }
+                self?.phase = .transcribing(
+                    step: "Transcribing on this device — \(Int(fraction * 100))%"
+                )
+            }
+        }
+        guard !heard.isEmpty else {
+            throw ScribeError.transcription("No speech was recognised in this recording.")
+        }
+
+        phase = .transcribing(step: "Working out who spoke")
+        let report: @Sendable (FluidDiarizer.Progress) -> Void = { [weak self] progress in
+            Task { @MainActor in
+                switch progress {
+                case .downloadingModels:
+                    self?.phase = .transcribing(step: "Getting the speaker model (about 30 MB)")
+                case .analysing(let fraction):
+                    self?.phase = .transcribing(
+                        step: "Working out who spoke — \(Int(fraction * 100))%"
+                    )
+                }
+            }
+        }
+
+        var segments = try await diarizer.segments(in: audio.url, report: report)
+
+        // Second pass, only on evidence of an under-count.
+        //
+        // Every tap during the meeting is an observation that a particular
+        // person was speaking. If more distinct people were tapped than the
+        // clusterer found voices, it merged two of them -- and unlike the
+        // attendee roster, which is a guest list and can name people who never
+        // say a word, a tap cannot over-state: somebody had to be talking for
+        // it to be made.
+        //
+        // Pinning to a count we merely hoped for is what re-introduces the
+        // over-counting this whole design exists to avoid, so this runs only
+        // when the two numbers actually disagree.
+        let observed = Set(tags.map { $0.name.lowercased() }).count
+        let found = Set(segments.map(\.speakerId)).count
+        if observed > found, observed > 1 {
+            phase = .transcribing(
+                step: "Heard \(observed) people but separated \(found) — looking again"
+            )
+            let retried = try await diarizer.segments(
+                in: audio.url, retryWithExactly: observed, report: report
+            )
+            // Keep it only if it actually did better. A retry that comes back
+            // with the same count, or fewer, has told us the audio does not
+            // support the split, and the first answer was the honest one.
+            if Set(retried.map(\.speakerId)).count > found { segments = retried }
+        }
+
+        let attributed = Diarization.absorbSingleWordFlickers(
+            Diarization.assign(words: heard, to: segments)
+        )
+        return Transcript.turns(from: attributed)
+    }
+
+    /// The chunked path. Only Gemini needs it, and only because Gemini caps
+    /// diarization at 30 minutes.
+    private func transcribeWithGemini(
+        meeting: UUID,
+        audio: (url: URL, durationMs: Int)
+    ) async throws -> (turns: [Turn], unmatched: [String]) {
+        guard let key = Keychain.get("gemini") else {
+            throw ScribeError.missingAPIKey
+        }
+
+        phase = .transcribing(step: "Preparing audio")
+        let pieces = try await AudioChunker.split(audio.url)
+
+        let transcriber = GeminiTranscriber(apiKey: key)
+        let cache = ChunkCache(meeting: meeting)
+        var chunks: [Chunk] = []
+        /// Whether a request has actually gone out yet, so pacing does not
+        /// delay a run that is only replaying cached parts.
+        var sentAnything = false
+
+        for (n, piece) in pieces.enumerated() {
+            let label = pieces.count == 1 ? "" : " part \(n + 1) of \(pieces.count)"
+
+            // A part already transcribed on an earlier attempt costs nothing to
+            // reuse, and re-sending it is what exhausts the quota that caused
+            // the failure in the first place.
+            if let done = cache.turns(at: n, offsetMs: piece.offsetMs) {
+                phase = .transcribing(step: "Reusing\(label)")
+                chunks.append(Chunk(offsetMs: piece.offsetMs, turns: done))
+                continue
+            }
+
+            // Space parts out rather than firing them back to back; the
+            // per-minute token budget is what a run of long chunks exhausts.
+            if sentAnything {
+                phase = .transcribing(step: "Pacing before\(label)")
+                try await Task.sleep(for: GeminiTranscriber.pacingBetweenParts)
+            }
+
+            phase = .transcribing(step: "Uploading\(label)")
+            let turns = try await transcriber.transcribe(fileURL: piece.url) { [weak self] progress in
+                Task { @MainActor in
+                    switch progress {
+                    case .uploading:
+                        self?.phase = .transcribing(step: "Uploading\(label)")
+                    case .transcribing:
+                        self?.phase = .transcribing(step: "Transcribing\(label)")
+                    case .waiting(let seconds, let attempt, let total):
+                        self?.phase = .transcribing(
+                            step: "Rate limited — waiting \(Int(seconds))s, retry \(attempt) of \(total)\(label)"
+                        )
+                    }
+                }
+            }
+            cache.save(turns, at: n, offsetMs: piece.offsetMs)
+            chunks.append(Chunk(offsetMs: piece.offsetMs, turns: turns))
+            sentAnything = true
+        }
+
+        phase = .transcribing(step: "Matching speakers")
+        let stitched = Stitcher.stitch(chunks, overlapMs: GeminiTranscriber.overlapMs)
+
+        // The chunks were only ever a way past the 30-minute cap.
         let fm = FileManager.default
-        for piece in pieces where piece.url != original {
+        for piece in pieces where piece.url != audio.url {
             try? fm.removeItem(at: piece.url)
         }
-        // The recording is no longer pending, so the retention setting decides.
-        archive.settle(meeting)
+        return (stitched.turns, stitched.unmatchedLabels)
     }
 
     func reset() {

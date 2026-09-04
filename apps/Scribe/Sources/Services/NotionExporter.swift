@@ -1,4 +1,5 @@
 import Foundation
+import ScribeCore
 
 /// Pushes a finished meeting into a Notion database.
 ///

@@ -20,11 +20,6 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Scribe records meetings so it can transcribe who said what. Recordings stay on this device and are deleted automatically; how long they are kept is up to you in Settings.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

@@ -17,26 +17,49 @@ chain has been exercised on real audio, not fixtures.
 | Summaries | `gemini-3.1-flash-lite`, ~$0.006/meeting |
 | Notion export | database created, full transcript verified end to end |
 | MCP (stdio + remote OAuth) | built and tested; remote not deployed |
-| Supabase | **local only** — see below |
+| Supabase | **hosted** — `lclnwhbhoibnipcbgbpi`, us-west-2 |
 
-## The one blocker
+## Hosted Supabase — done
 
-**The hosted Supabase project does not exist.** Supabase's Management API was
-mid-outage (`Project Lifecycle Actions`, all regions) every time we tried.
+Created 2026-09-04 once Supabase's Management API recovered.
 
-Everything is ready for it:
+- Project **`machina-scribe`**, ref `lclnwhbhoibnipcbgbpi`
+- Org **Machina Labs** (`wvghonxfpprrwrtczcwe`), region **us-west-2** (Oregon)
+- Repo is linked; all four migrations applied; `supabase db diff --linked`
+  reports no drift
+- Password still in `.secrets/db-password`
 
-- Free org **Machina Labs** — `wvghonxfpprrwrtczcwe`, confirmed $0/project
-- A generated DB password already sits in `.secrets/db-password`
-- `supabase projects create machina-scribe --org-id wvghonxfpprrwrtczcwe --region us-west-1 --db-password "$(cat .secrets/db-password)"`
+Data migrated 2026-09-04 and the local stack stopped. All 1473 segments,
+2 meetings, 9 speakers, 4 people, 6 attendees, 4 live tags and the single auth
+user -- same UUID, so every `user_id` FK still resolves and the same password
+still signs in. Verified by matching row counts **and** an MD5 over the
+concatenated transcript text on both sides; RLS checked by impersonating the
+user (2 meetings, 1473 transcript lines visible).
 
-Then `supabase link` + `supabase db push`, and repoint both apps in Settings.
+Two fallbacks kept: `backups/local-snapshot-2026-09-04.sql` (gitignored, in the
+main checkout) and the Docker volumes, which `supabase stop` preserved rather
+than deleted.
 
-Until then everything runs against the local stack, which means:
+Remaining: repoint both apps in Settings from `http://<mac-lan-ip>:54421` to the
+hosted URL, then drop `NSAllowsLocalNetworking` from both Info.plist blocks in
+`apps/project.yml`.
 
-- `supabase start` must be running and the Mac awake
-- The phone only works on the same Wi-Fi, at `http://<mac-lan-ip>:54421`
-- Data lives in a Docker volume, not backed up
+`supabase start` brings the local stack back for offline work. Only the
+machina-scribe stack was stopped -- the builderpoint and drivetrack ones are
+untouched.
+
+## Public repo
+
+`https://github.com/DriveTrack/machina-scribe` — public, `main` pushed. History
+was scanned for credentials before publishing; nothing found.
+
+## Going local
+
+See `docs/LOCAL-FIRST-PLAN.md`. Short version: Apple's `SpeechAnalyzer` and
+FluidAudio's offline diarizer both measured working on this Mac, which removes
+Gemini's 30-minute cap and with it the chunking, stitching, caching and pacing
+that cap forced on us. `FoundationModels` needs Apple Intelligence turned on
+before the free summary path can be tested at all.
 
 ## Costs, measured rather than guessed
 

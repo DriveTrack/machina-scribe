@@ -107,12 +107,12 @@ struct RecordView: View {
                         .padding(.vertical, 10)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(!app.hasGeminiKey)
+                .disabled(!app.canTranscribe)
             }
         }
         .overlay(alignment: .bottom) {
-            if !app.hasGeminiKey {
-                Text("Add a Gemini API key in Settings first.")
+            if let blocker = app.transcriptionBlocker {
+                Text(blocker)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .offset(y: 26)

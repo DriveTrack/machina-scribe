@@ -6,16 +6,16 @@ configFiles:
 options:
   bundleIdPrefix: com.machinascribe
   deploymentTarget:
-    iOS: "17.0"
-    macOS: "14.0"
+    iOS: "26.0"
+    macOS: "26.0"
   createIntermediateGroups: true
 
 packages:
-  Supabase:
-    url: https://github.com/supabase/supabase-swift
-    from: "2.0.0"
   ScribeCore:
     path: ScribeCore
+  FluidAudio:
+    url: https://github.com/FluidInference/FluidAudio
+    from: "0.15.6"
 
 targets:
   Scribe-iOS:
@@ -25,10 +25,10 @@ targets:
       - path: Scribe/Sources
       - path: Scribe/Resources/Assets.xcassets
     dependencies:
-      - package: Supabase
-        product: Supabase
       - package: ScribeCore
         product: ScribeCore
+      - package: FluidAudio
+        product: FluidAudio
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.machinascribe.Scribe
@@ -53,12 +53,6 @@ targets:
           requires on-device recognition, so despite the notice above, this
           audio is not sent to Apple. Declining only hides the preview.
         UIBackgroundModes: [audio]
-        # Lets the app talk to a Supabase running on this Mac over plain HTTP
-        # while the hosted project does not exist yet. This flag permits only
-        # local and link-local addresses -- it does not allow cleartext to the
-        # public internet. Safe to drop once you are on a https:// project.
-        NSAppTransportSecurity:
-          NSAllowsLocalNetworking: true
         UILaunchScreen: {}
 
   Scribe-macOS:
@@ -68,10 +62,10 @@ targets:
       - path: Scribe/Sources
       - path: Scribe/Resources/Assets.xcassets
     dependencies:
-      - package: Supabase
-        product: Supabase
       - package: ScribeCore
         product: ScribeCore
+      - package: FluidAudio
+        product: FluidAudio
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.machinascribe.Scribe
@@ -95,8 +89,4 @@ targets:
           Used only for the rough live preview shown while you record. Scribe
           requires on-device recognition, so despite the notice above, this
           audio is not sent to Apple. Declining only hides the preview.
-        LSMinimumSystemVersion: "14.0"
-        # Same as the iOS target: reach the local Supabase over plain HTTP.
-        # Permits local/link-local addresses only, not the public internet.
-        NSAppTransportSecurity:
-          NSAllowsLocalNetworking: true
+        LSMinimumSystemVersion: "26.0"
