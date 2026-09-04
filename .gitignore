@@ -1,0 +1,17 @@
+.DS_Store
+node_modules/
+dist/
+*.log
+
+# Xcode
+apps/Scribe.xcodeproj/
+apps/*.xcworkspace/
+.build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# never commit real credentials
+.env
+.env.*
+!.env.example

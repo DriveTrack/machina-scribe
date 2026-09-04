@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "machina-scribe": {
+      "command": "node",
+      "args": ["mcp-server/dist/index.js"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}",
+        "SCRIBE_USER_ID": "${SCRIBE_USER_ID}"
+      }
+    }
+  }
+}
