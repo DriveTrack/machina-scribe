@@ -214,13 +214,29 @@ final class ScribeStore {
         try await client.from("meetings").select().eq("id", value: id).maybeSingle().execute().value
     }
 
+    /// PostgREST answers with at most 1000 rows unless a range is given, and
+    /// says nothing about the ones it left out. A two-hour meeting is around
+    /// 1500 turns, so an unpaged read silently returned a transcript that
+    /// stopped an hour and twenty minutes in and looked complete.
     func transcript(meeting: UUID) async throws -> [TranscriptLine] {
-        try await client.from("transcript_lines")
-            .select("idx,start_ms,end_ms,text,speaker,speaker_label,resolved_by")
-            .eq("meeting_id", value: meeting)
-            .order("idx")
-            .execute()
-            .value
+        let pageSize = 1000
+        var all: [TranscriptLine] = []
+        var offset = 0
+
+        while true {
+            let page: [TranscriptLine] = try await client
+                .from("transcript_lines")
+                .select("idx,start_ms,end_ms,text,speaker,speaker_label,resolved_by")
+                .eq("meeting_id", value: meeting)
+                .order("idx")
+                .range(from: offset, to: offset + pageSize - 1)
+                .execute()
+                .value
+
+            all.append(contentsOf: page)
+            if page.count < pageSize { return all }
+            offset += pageSize
+        }
     }
 
     /// What went wrong with the live tags for a meeting: taps that matched no

@@ -10,6 +10,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 KEY_FILE=.secrets/gemini-key
+# Accept the key from the environment, from .env, or from .secrets/gemini-key.
+if [ -z "${GEMINI_API_KEY:-}" ] && [ -f .env ]; then
+  GEMINI_API_KEY=$(grep -E '^GEMINI_API_KEY=' .env | tail -1 | cut -d= -f2- | tr -d '"'"'"'[:space:]')
+fi
 KEY="${GEMINI_API_KEY:-$(grep -v '^#' "$KEY_FILE" 2>/dev/null | tr -d '[:space:]' || true)}"
 if [ -z "$KEY" ]; then
   echo "No key. Paste one into $KEY_FILE or export GEMINI_API_KEY." >&2

@@ -97,15 +97,29 @@ export class Store {
     return data;
   }
 
+  /**
+   * PostgREST caps a response at 1000 rows unless a range is given, and gives
+   * no indication that it truncated. A long meeting runs past that, so an
+   * unpaged read hands back a transcript that just stops partway through --
+   * which, for a summary or a search, silently loses the second half.
+   */
   async getLines(meetingId: string): Promise<LineRow[]> {
-    return this.unwrap(
-      await this.db
-        .from('transcript_lines')
-        .select('idx,start_ms,end_ms,speaker,speaker_label,resolved_by,text')
-        .eq('user_id', this.userId)
-        .eq('meeting_id', meetingId)
-        .order('idx', { ascending: true })
-    );
+    const pageSize = 1000;
+    const all: LineRow[] = [];
+
+    for (let offset = 0; ; offset += pageSize) {
+      const page = this.unwrap<LineRow[]>(
+        await this.db
+          .from('transcript_lines')
+          .select('idx,start_ms,end_ms,speaker,speaker_label,resolved_by,text')
+          .eq('user_id', this.userId)
+          .eq('meeting_id', meetingId)
+          .order('idx', { ascending: true })
+          .range(offset, offset + pageSize - 1)
+      );
+      all.push(...page);
+      if (page.length < pageSize) return all;
+    }
   }
 
   /** Voices in a meeting that nobody has put a name to yet. */
