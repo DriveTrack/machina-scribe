@@ -22,17 +22,20 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                         .textSelection(.enabled)
                 }
-                Button("Show in Finder") { app.revealStore() }
-                    #if os(iOS)
-                    .hidden()
-                    #endif
+                #if os(macOS)
+                HStack {
+                    Button("Show in Finder") { app.revealStore() }
+                    Button("Back up…") { backUp() }
+                }
+                #endif
             } header: {
                 Text("Where your meetings live")
             } footer: {
                 Text(
-                    "One file on this device. Nothing is uploaded, there is no "
-                    + "account, and deleting the app deletes the meetings with it. "
-                    + "Back it up the way you back up anything else."
+                    "One file on this device. Nothing is uploaded and there is no "
+                    + "account. Use Back up… rather than copying the file by hand: "
+                    + "recent meetings can still be in the write-ahead log, and a "
+                    + "plain copy would leave them behind."
                 )
             }
 
@@ -263,6 +266,22 @@ struct SettingsView: View {
             message = error.localizedDescription
         }
     }
+
+    #if os(macOS)
+    private func backUp() {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "scribe-\(Meeting.dateTitle()).sqlite"
+        panel.allowedContentTypes = [.database]
+        panel.canCreateDirectories = true
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try app.store?.backup(to: url)
+            message = "Backed up to \(url.lastPathComponent)."
+        } catch {
+            message = error.localizedDescription
+        }
+    }
+    #endif
 
     private func saveKey() {
         do {

@@ -144,6 +144,38 @@ final class LocalStore {
     private func now() -> SQLite.Value { .init(Date()) }
     private func newId() -> String { UUID().uuidString }
 
+    // MARK: - Keeping the file copyable
+
+    /// Fold the write-ahead log back into the main file.
+    ///
+    /// Write-ahead logging means a recent transcript can live entirely in
+    /// `scribe.sqlite-wal` and not in `scribe.sqlite` at all. Anyone who backs
+    /// this up the obvious way -- copy the .sqlite, drag it to a drive -- would
+    /// silently take a snapshot missing their newest meetings. That is exactly
+    /// what happened the first time a copy of this database was taken during
+    /// development, and the copy came back with zero rows.
+    ///
+    /// Cheap, and worth doing whenever the app is about to stop being used.
+    func checkpoint() {
+        try? db.execute("pragma wal_checkpoint(truncate)")
+    }
+
+    /// A consistent single-file snapshot, WAL included.
+    ///
+    /// `vacuum into` rather than a file copy: it takes a read lock, writes one
+    /// complete database, and cannot catch a half-finished transaction. The
+    /// result is a plain SQLite file that opens anywhere.
+    func backup(to destination: URL) throws {
+        // vacuum refuses to overwrite, which is the behaviour we want -- but
+        // the caller has usually just picked a filename in a save panel and
+        // been asked about replacing it already.
+        if FileManager.default.fileExists(atPath: destination.path) {
+            try FileManager.default.removeItem(at: destination)
+        }
+        let escaped = destination.path.replacingOccurrences(of: "'", with: "''")
+        try db.execute("vacuum into '\(escaped)'")
+    }
+
     // MARK: - Recording lifecycle
 
     func startMeeting(title: String?, location: String?) async throws -> UUID {

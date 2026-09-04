@@ -91,7 +91,7 @@ struct ExtractedFactsTests {
             openQuestions: ["Do we bump the target?"],
             topics: ["timing"]
         )
-        let digest = facts.digest
+        let digest = facts.digest()
         #expect(digest.contains("Ship Friday"))
         #expect(digest.contains("Fix alignment — Wilma (Friday)"))
         #expect(digest.contains("Do we bump the target?"))
@@ -99,7 +99,7 @@ struct ExtractedFactsTests {
 
     @Test("nothing extracted still says so rather than rendering blank")
     func emptyDigest() {
-        #expect(ExtractedFacts.merged([]).digest == "Nothing specific was extracted.")
+        #expect(ExtractedFacts.merged([]).digest() == "Nothing specific was extracted.")
     }
 }
 
@@ -143,5 +143,120 @@ struct SummaryDecodingTests {
     @Test("JSON missing a required field returns nil")
     func incomplete() {
         #expect(MeetingSummary.decoding(#"{"title":"Only a title"}"#) == nil)
+    }
+}
+
+@Suite("Keeping the reduce step inside the window")
+struct DigestBudgetTests {
+
+    /// The shape that actually broke: a 111-minute meeting yielded 80 topics,
+    /// 38 commitments and 131 "open questions". Rendered whole that came to
+    /// ~3,500 tokens against a 4,096-token window, the model never saw the
+    /// facts, and it answered from the example in its instructions instead.
+    private var realisticOverflow: ExtractedFacts {
+        ExtractedFacts.merged((0..<20).map { w in
+            ExtractedFacts(
+                decisions: (0..<3).map { "Decision \(w)-\($0) about something at length" },
+                actionItems: (0..<3).map {
+                    .init(task: "Task \(w)-\($0) that somebody committed to doing",
+                          owner: "Jose", due: "Friday")
+                },
+                openQuestions: (0..<8).map { "Open question \(w)-\($0) raised in passing?" },
+                topics: (0..<4).map { "Topic \(w)-\($0)" }
+            )
+        })
+    }
+
+    @Test("the uncapped facts really would overflow")
+    func wouldOverflow() {
+        let facts = realisticOverflow
+        #expect(facts.topics.count > 60)
+        #expect(facts.openQuestions.count > 100)
+    }
+
+    @Test("the digest stays inside the reduce budget")
+    func staysInBudget() {
+        // 6000 characters is roughly 1500 tokens, leaving the rest of the
+        // 4096 for instructions, schema and the answer.
+        #expect(realisticOverflow.digest().count < 6_000)
+    }
+
+    @Test("the tightened digest is smaller still")
+    func tightensFurther() {
+        let facts = realisticOverflow
+        let tight = facts.digest(maxTopics: 6, maxDecisions: 6, maxActionItems: 6, maxOpenQuestions: 3)
+        #expect(tight.count < facts.digest().count)
+        #expect(tight.count < 3_000)
+    }
+
+    @Test("what several windows agreed on comes first")
+    func ranksByAgreement() {
+        let facts = ExtractedFacts.merged([
+            ExtractedFacts(decisions: ["Mentioned once"]),
+            ExtractedFacts(decisions: ["Agreed by three"]),
+            ExtractedFacts(decisions: ["Agreed by three"]),
+            ExtractedFacts(decisions: ["agreed by three"]),
+        ])
+        #expect(facts.decisions.first == "Agreed by three")
+    }
+
+    @Test("a paragraph pasted into a deadline is dropped, the task kept")
+    func rejectsParagraphDue() {
+        let essay = String(repeating: "the speaker kept talking and talking ", count: 8)
+        let facts = ExtractedFacts.merged([
+            ExtractedFacts(actionItems: [.init(task: "Fix the importer", owner: "Jose", due: essay)])
+        ])
+        #expect(facts.actionItems.count == 1)
+        #expect(facts.actionItems[0].due == nil)
+        #expect(facts.actionItems[0].task == "Fix the importer")
+    }
+
+    @Test("a short deadline survives")
+    func keepsShortDue() {
+        let facts = ExtractedFacts.merged([
+            ExtractedFacts(actionItems: [.init(task: "Ship it", owner: "Jose", due: "by Friday")])
+        ])
+        #expect(facts.actionItems[0].due == "by Friday")
+    }
+
+    @Test("a whole paragraph mis-extracted as a task is dropped entirely")
+    func rejectsParagraphTask() {
+        let essay = String(repeating: "this is not really a task at all ", count: 12)
+        let facts = ExtractedFacts.merged([
+            ExtractedFacts(actionItems: [.init(task: essay), .init(task: "A real one")])
+        ])
+        #expect(facts.actionItems.map(\.task) == ["A real one"])
+    }
+}
+
+@Suite("A model writing the word 'empty' instead of leaving it empty")
+struct PlaceholderTests {
+
+    @Test("'Not specified' as a deadline is no deadline")
+    func notSpecified() {
+        let facts = ExtractedFacts.merged([
+            ExtractedFacts(actionItems: [.init(task: "Import the catalog", owner: "Jose", due: "Not specified")])
+        ])
+        #expect(facts.actionItems[0].due == nil)
+        #expect(facts.actionItems[0].owner == "Jose")
+    }
+
+    @Test("the usual ways of writing nothing all count as nothing")
+    func variants() {
+        for placeholder in ["N/A", "n/a", "none", "TBD", "unknown", "Not mentioned", "  "] {
+            let facts = ExtractedFacts.merged([
+                ExtractedFacts(actionItems: [.init(task: "T", owner: placeholder, due: placeholder)])
+            ])
+            #expect(facts.actionItems[0].due == nil, "due should be nil for \(placeholder)")
+            #expect(facts.actionItems[0].owner == nil, "owner should be nil for \(placeholder)")
+        }
+    }
+
+    @Test("a real deadline that merely sounds vague is kept")
+    func keepsRealOnes() {
+        let facts = ExtractedFacts.merged([
+            ExtractedFacts(actionItems: [.init(task: "T", owner: "Nia", due: "eventually")])
+        ])
+        #expect(facts.actionItems[0].due == "eventually")
     }
 }

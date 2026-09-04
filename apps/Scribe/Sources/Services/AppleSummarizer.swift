@@ -28,6 +28,11 @@ struct AppleSummarizer: MeetingSummarizing {
     /// instructions, the schema and the answer.
     private let windowCharacters = 6_000
 
+    /// The reduce prompt's ceiling, in characters. ~4 chars per token puts
+    /// this near 1,500 tokens, leaving the rest of the window for the
+    /// instructions, the schema and the overview itself.
+    static let maximumReduceCharacters = 6_000
+
     enum Failure: LocalizedError {
         case unavailable(String)
 
@@ -152,7 +157,17 @@ struct AppleSummarizer: MeetingSummarizing {
         if let notes, !notes.isEmpty {
             reducePrompt += "Notes the recorder typed during the meeting:\n\(notes)\n\n"
         }
-        reducePrompt += "What was extracted from the transcript:\n\(facts.digest)"
+        reducePrompt += "What was extracted from the transcript:\n\(facts.digest())"
+
+        // Belt and braces on the thing that actually broke: if the prompt is
+        // still too big for the window, the model would silently answer from
+        // its instructions instead of these facts. Trim harder rather than let
+        // that happen.
+        if reducePrompt.count > Self.maximumReduceCharacters {
+            reducePrompt = "Meeting title so far: \(title?.isEmpty == false ? title! : "untitled")\n\n"
+                + "What was extracted from the transcript:\n"
+                + facts.digest(maxTopics: 6, maxDecisions: 6, maxActionItems: 6, maxOpenQuestions: 3)
+        }
 
         let session = LanguageModelSession(instructions: Self.overviewInstructions)
         let overview = try await session.respond(
@@ -179,20 +194,48 @@ struct AppleSummarizer: MeetingSummarizing {
     - A commitment is someone saying they will do something. "We should \
     probably look at that" is not a commitment; put it under open questions.
     - Name an owner only when the passage names one. Leave it empty otherwise.
-    - Give a deadline in the speaker's own words rather than a calendar date.
+    - Give a deadline in the speaker's own words rather than a calendar date, \
+    and keep it to a few words. If the passage does not give one in a few \
+    words, leave it empty rather than quoting a sentence.
+    - An open question is a real question about the work that nobody answered. \
+    Passing small talk is not an open question.
     - The transcript comes from speech recognition, so expect mis-heard words. \
     Read through obvious errors rather than quoting them.
     - Empty lists are correct and expected. Most passages settle nothing.
+    - This is a work meeting, and people chat. Personal conversation -- pets, \
+    prices, weekend plans, what someone had for lunch -- is not a decision, a \
+    commitment or an open question, however question-shaped it sounds. Leave \
+    it out.
+    - Where a field does not apply, return an empty string. Never write "not \
+    specified", "N/A" or "unknown" -- an empty string is how you say that.
     """
 
     private static let overviewInstructions = """
     You are writing the top of a meeting record for the person who recorded it, \
-    from facts already extracted from the transcript.
+    from facts already extracted from that meeting's transcript.
 
-    - Use only the facts given. Never invent a decision, an owner or a deadline.
-    - The title names the subject, not the artefact. "Q4 migration timing" is \
-    useful; "Meeting about the project" is not.
-    - The summary is two or three sentences: what the meeting was for, and \
-    where it landed. It is a record, not an essay.
+    - Use only the facts below. Every word of your answer must be traceable to \
+    them. Never invent a subject, a decision, an owner or a deadline.
+    - The title must name what THESE facts are about, in three to six words. \
+    Do not name a topic that does not appear in them.
+    - The summary is two or three sentences naming the substance: what this \
+    meeting was working on, and what state it was left in.
+    - Do NOT list the decisions or the tasks. The reader is shown those as \
+    their own lists directly beneath your summary, so repeating them wastes \
+    the only sentences you have. A summary that reads as a comma-separated run \
+    of items has failed.
+    - Equally, do not fill the space with nothing. "The meeting went well", \
+    "there were no major issues", "various topics were discussed" say nothing \
+    a reader could not have guessed, and are worse than a short summary. Every \
+    sentence must carry a specific from the facts.
+    - Two concrete sentences beat three vague ones.
     """
+
+    // No worked example anywhere in these instructions, deliberately. The
+    // first version illustrated a good title with "Q4 migration timing" -- and
+    // when the reduce prompt overflowed the context window, the model could no
+    // longer see the facts and returned that example as the answer. A meeting
+    // about vehicle inventory came back titled "Q4 migration timing", with a
+    // summary invented to match. An example a model can copy is an example it
+    // will copy on the day it has nothing else.
 }

@@ -204,14 +204,8 @@ final class RecordingSession {
             throw ScribeError.transcription("No speech was recognised in this recording.")
         }
 
-        // The people named before the meeting started. Pinning the count is
-        // what stops the clusterer merging two similar voices into one.
-        let expected = attendees.isEmpty ? nil : attendees.count
         phase = .transcribing(step: "Working out who spoke")
-        let segments = try await diarizer.segments(
-            in: audio.url,
-            expectedSpeakers: expected
-        ) { [weak self] progress in
+        let report: @Sendable (FluidDiarizer.Progress) -> Void = { [weak self] progress in
             Task { @MainActor in
                 switch progress {
                 case .downloadingModels:
@@ -222,6 +216,35 @@ final class RecordingSession {
                     )
                 }
             }
+        }
+
+        var segments = try await diarizer.segments(in: audio.url, report: report)
+
+        // Second pass, only on evidence of an under-count.
+        //
+        // Every tap during the meeting is an observation that a particular
+        // person was speaking. If more distinct people were tapped than the
+        // clusterer found voices, it merged two of them -- and unlike the
+        // attendee roster, which is a guest list and can name people who never
+        // say a word, a tap cannot over-state: somebody had to be talking for
+        // it to be made.
+        //
+        // Pinning to a count we merely hoped for is what re-introduces the
+        // over-counting this whole design exists to avoid, so this runs only
+        // when the two numbers actually disagree.
+        let observed = Set(tags.map { $0.name.lowercased() }).count
+        let found = Set(segments.map(\.speakerId)).count
+        if observed > found, observed > 1 {
+            phase = .transcribing(
+                step: "Heard \(observed) people but separated \(found) — looking again"
+            )
+            let retried = try await diarizer.segments(
+                in: audio.url, retryWithExactly: observed, report: report
+            )
+            // Keep it only if it actually did better. A retry that comes back
+            // with the same count, or fewer, has told us the audio does not
+            // support the split, and the first answer was the honest one.
+            if Set(retried.map(\.speakerId)).count > found { segments = retried }
         }
 
         let attributed = Diarization.absorbSingleWordFlickers(

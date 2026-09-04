@@ -44,31 +44,39 @@ actor FluidDiarizer {
 
     /// Segment `fileURL` into per-speaker stretches.
     ///
-    /// `expectedSpeakers` pins the cluster count, and passing it matters more
-    /// than it looks. Left to decide for itself, VBx *under*-counts: a
-    /// three-voice recording came back as two, merging the two people who
-    /// sounded most alike -- one of whom had spoken only briefly. That is the
-    /// mirror image of the chunked-Gemini bug, which over-counted. Pinning it
-    /// fixed all but one turn of the same recording.
+    /// Unpinned by default, because pinning to a guess is worse than not
+    /// pinning at all. Measured on a real 111-minute meeting with four
+    /// speakers, where the roster named only three of them:
     ///
-    /// We know the number because the tagging pad already collects it: the
-    /// attendees named before the meeting starts. Humla has no roster and has
-    /// to expose a manual "number of speakers" control instead. Pass nil when
-    /// the roster is empty and let it decide.
+    ///     unpinned                  3 speakers   (under by 1)
+    ///     exactly roster (3)        3 speakers   (under by 1)
+    ///     min roster, no max        3 speakers   (under by 1)
+    ///     min roster, max roster+4  3 speakers   (under by 1)
+    ///     exactly truth (4)         4 speakers   correct
+    ///
+    /// Two things follow. `min` and `max` do not move the answer at all --
+    /// only `exactly` does. And `exactly <roster>` is only right when the
+    /// roster is right: name four attendees and have one stay silent, and it
+    /// forces the clusterer to split somebody in two, which is the
+    /// over-counting bug we came here to escape.
+    ///
+    /// So the count is never guessed. `retryWithExactly` exists for the
+    /// caller to re-run once it has *evidence* of an under-count -- see
+    /// `RecordingSession`, which uses the live tags, because a tap is an
+    /// observation that somebody spoke rather than a guess that they might.
     func segments(
         in fileURL: URL,
-        expectedSpeakers: Int? = nil,
+        retryWithExactly exactCount: Int? = nil,
         report: (@Sendable (Progress) -> Void)? = nil
     ) async throws -> [SpeakerSegment] {
         if models == nil { report?(.downloadingModels) }
         let models = try await loadedModels()
 
         var config = OfflineDiarizerConfig()
-        // Only pin a count we could actually believe. One "speaker" is not a
-        // conversation, and a roster far larger than the people who really
-        // spoke would force the clusterer to invent divisions.
-        if let expected = expectedSpeakers, expected > 1 {
-            config = config.withSpeakers(exactly: expected)
+        // Only ever set from evidence, and never to a count so small it could
+        // not be a conversation.
+        if let exactCount, exactCount > 1 {
+            config = config.withSpeakers(exactly: exactCount)
         }
 
         let manager = OfflineDiarizerManager(config: config)

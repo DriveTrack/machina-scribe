@@ -117,11 +117,35 @@ has no seams.
 
 **Both error directions are real and they are opposite.** Chunked Gemini
 over-counts; whole-file clustering *under*-counts -- run without a roster the
-same audio came back as three, merging Nia and Shania. Pinning with
-`OfflineDiarizerConfig().withSpeakers(exactly:)` is what makes it exact, and we
-already collect that number: the tagging pad asks who is in the meeting before
-it starts. Humla has no roster and exposes a manual control instead. The pin is
-applied only when the roster holds more than one name.
+same audio came back as three, merging Nia and Shania.
+
+**But pinning to the roster was the wrong fix, and running it end to end proved
+it.** The stored roster for that meeting named three people; four spoke, because
+Shania was never on the list. A sweep over every option, against a truth of
+four:
+
+```
+unpinned                  3 speakers   under by 1
+exactly roster (3)        3 speakers   under by 1
+min roster, no max        3 speakers   under by 1
+min roster, max roster+2  3 speakers   under by 1
+min roster, max roster+4  3 speakers   under by 1
+exactly truth (4)         4 speakers   correct
+```
+
+Two things fall out. `min` and `max` do not move the answer at all -- only
+`exactly` does. And `exactly <roster>` is right only when the roster is right:
+name four attendees, have one stay silent, and it *forces* the clusterer to
+split somebody in two. That is the over-counting bug we came here to escape,
+reintroduced from the other side.
+
+So the count is never guessed. The retry runs on **evidence**: every live tag is
+an observation that a particular person was speaking, and unlike a guest list a
+tap cannot over-state -- somebody had to be talking for it to be made. If more
+distinct people were tapped than voices were found, the clusterer merged two of
+them, and only then is a second pass run pinned to the number observed. A retry
+that comes back no better is discarded, because the audio has said it does not
+support the split.
 
 ### Joining the two passes
 
@@ -206,24 +230,79 @@ stayed put when it did not.
 **Gemini.** Unchanged, still selectable, and now honestly labelled as uploading
 the transcript.
 
-#### What is verified and what is not
+#### What running it actually taught us
+
+The on-device summariser was written before Apple Intelligence was switched on,
+so it shipped compiling but unexecuted. The first real run found three things no
+amount of reading would have.
+
+**A prompt's example is an answer the model will give you.** The reduce
+instruction illustrated a good title with *"Q4 migration timing"*. The digest
+was uncapped -- 80 topics, 38 commitments, 131 "open questions" -- which came to
+~3,500 tokens against the 4,096 the model has for prompt, schema and answer
+together. It overflowed, the model never saw the facts, and it answered from the
+only thing left in front of it: a meeting about vehicle inventory came back
+titled **"Q4 migration timing"**, with a summary invented to match. There is now
+no worked example anywhere in these instructions, and the digest is ranked by
+how many windows agreed on each item and capped, with a second, tighter cap if
+the prompt is still too long.
+
+**A model asked to leave a field empty will write the word "empty".** Action
+items came back `due Not specified`, which renders in the UI as though a
+deadline exists. Placeholders are now filtered out deterministically rather than
+asked away, because asking does not reliably work.
+
+**A model asked for a deadline "in the speaker's own words" will paste a
+paragraph.** One `due` field held eighty words of somebody thinking aloud.
+Anything over 60 characters is not a deadline and is dropped; the task survives.
+
+Where it landed, on the same 111-minute meeting, entirely on this Mac and for
+nothing:
+
+```
+TITLE:   Builder Point project updates
+SUMMARY: The meeting discussed updates to the Builder Point project, including
+         project deadlines, lead reassignment, and feature additions. The
+         project is left in a state of progress with some decisions made and
+         others pending. Open questions remain regarding Chris Rieplinger's
+         role, mechanic hookups, and business retirement.
+
+ACTION ITEMS (60), e.g.
+  - Set project deadline to seven days from creation [Jose]
+  - Allow approvers to click on approvals to see status [Jose]
+  - Allow Chris Rieplinger to add line items to estimates [Jose]
+```
+
+**The narrative summary is the weak part, and tightening the prompt trades one
+failure for another.** Across four runs on the same transcript the title was
+right every time and the extracted lists were consistently useful, but the
+two-sentence overview swung between enumerating the lists ("...decisions to
+reassign leads, improve reports, promote to prod, finish projects, import
+catalog items...") and saying nothing at all ("The meeting went well, with no
+major issues"). The instruction now forbids both by name.
+
+Decision counts across those runs were 19, 9 and 2 as the wording changed. A 3B
+model reading one passage at a time cannot reliably separate a decision from a
+strong opinion, and no prompt makes it deterministic. **This is the honest
+ceiling of a 4096-token model, not a bug still to fix.**
+
+What that means in practice: trust the **title** and the **structured lists** --
+they come from the extraction pass, which is the part this model is good at.
+Treat the overview as a nicety. For a meeting where the narrative matters, the
+local-server tier sees the whole transcript at once and does not have to
+reconstruct the meeting from fragments.
+
+#### Where each engine stands
 
 | | Status |
 |---|---|
-| Window splitting, fact merging, reply parsing | **40 unit tests**, all passing |
-| Local-server path | **run end to end** against a stand-in server with the real 103,252-character transcript |
-| On-device path | **compiles only** |
+| Window splitting, ranking, capping, placeholder filtering, reply parsing | **50 unit tests** |
+| On-device summariser | **run on the real 111-minute meeting**, four times |
+| Local-server summariser | **run end to end** against a stand-in server |
+| Gemini | unchanged |
 
-The local-server client was exercised with the messy shape a small model
-actually returns — a `<think>` block, a sentence of preamble, then fenced JSON —
-and parses it. An unreachable server reports "Is the server running?" rather
-than a decode error.
-
-**The on-device summariser has never been run.** `SystemLanguageModel.default`
-reports `unavailable(appleIntelligenceNotEnabled)` on this machine, so there is
-no way to execute it here. The macros compile and the surrounding logic is
-tested, but the model's behaviour on a real meeting is unknown until Apple
-Intelligence is switched on in System Settings.
+Cost of an on-device summary of a 111-minute meeting: **~5 minutes at 2% CPU,
+and nothing in money or memory.**
 
 ### Free 1.9 GB today
 
