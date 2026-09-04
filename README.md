@@ -38,6 +38,18 @@ Because segments reference a `speakers` row rather than storing a name, renaming
 is a single write that relabels the entire meeting. A manual rename always wins
 over a tag-inferred one and survives re-running the matcher.
 
+### The live preview
+
+While recording, the screen shows a rough running transcript so you can see the
+microphone is working. It is **on-device only** (`requiresOnDeviceRecognition`),
+has no speaker labels, and is never saved — Gemini's diarized pass is the real
+transcript. If a device cannot do on-device recognition for your language the
+preview switches itself off rather than streaming the meeting to Apple.
+
+iOS shows its own stock warning that speech data "will be sent to Apple" on the
+permission prompt. That is boilerplate for the permission and does not reflect
+what this app does; the usage string underneath says so.
+
 ### Meetings longer than 30 minutes
 
 The recording is split into 20-minute pieces that overlap by 40 seconds. Each
@@ -56,11 +68,16 @@ to the wrong person.
 ```
 supabase/migrations/   schema, RLS, and the tag-resolution logic (SQL)
 supabase/local-tests/  SQL tests for that logic
-mcp-server/            MCP server that exposes transcripts to Claude (TypeScript)
+packages/core/         Store + tool definitions, shared by both MCP servers
+packages/stdio/        local MCP server over stdio (Claude Code, Claude Desktop)
+packages/remote/       OAuth-protected MCP server on Cloudflare Workers
 apps/ScribeCore/       pure logic: response parsing, turn building, stitching
 apps/Scribe/           SwiftUI app, shared by the iOS and macOS targets
 scripts/test-db.sh     runs the SQL tests against a throwaway Postgres
 ```
+
+Both MCP servers register the *same* tool list from `packages/core`, so they
+cannot drift apart.
 
 ---
 
@@ -94,17 +111,51 @@ launch enter your Supabase URL and anon key (both publishable) and sign in.
 
 ### 4. MCP server
 
+Two ways in. They serve identical tools; pick either or run both.
+
+**Local (stdio).** Simplest, nothing to deploy. Works in Claude Code and Claude
+Desktop on the machine it runs on.
+
 ```bash
-cd mcp-server && npm install && npm run build
+npm install && npm run build
 ```
 
-Copy `.env.example` to `.env` and fill in the three values, then register it:
+Copy `.env.example` to `.env`, fill in the three values, then:
 
 ```bash
-claude mcp add machina-scribe --env SUPABASE_URL=... --env SUPABASE_SERVICE_ROLE_KEY=... --env SCRIBE_USER_ID=... -- node /absolute/path/to/mcp-server/dist/index.js
+claude mcp add machina-scribe --env SUPABASE_URL=... --env SUPABASE_SERVICE_ROLE_KEY=... --env SCRIBE_USER_ID=... -- node /absolute/path/to/packages/stdio/dist/index.js
 ```
 
-Tools it exposes:
+**Remote (Cloudflare Workers).** Reachable from claude.ai and the mobile apps,
+protected by OAuth. Sign-in is checked against your own Supabase project, so
+there is no second set of credentials.
+
+```bash
+cd packages/remote
+npx wrangler kv namespace create OAUTH_KV     # put the id in wrangler.jsonc
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+# set SUPABASE_URL and SUPABASE_ANON_KEY under "vars" in wrangler.jsonc
+npx wrangler deploy
+```
+
+Then add `https://<your-worker>.workers.dev/mcp` as a custom connector in
+Claude. It registers itself (dynamic client registration), sends you to a login
+page, and you sign in with the same account the app uses.
+
+How the authorization works, and why it is safe to hand a service-role key to a
+Worker:
+
+- The Worker never trusts a user id from the caller. It comes from the OAuth
+  grant, is encrypted into the token, and is the only thing that scopes queries.
+- The login form posts the authorization request back through the browser, so
+  the redirect URI is re-checked against what the client registered before any
+  code is issued — a tampered field cannot turn it into an open redirect.
+- PKCE (S256) is required, and `/mcp` rejects unauthenticated requests.
+
+`packages/remote/test/oauth-flow.test.mjs` asserts all of the above against a
+running `wrangler dev`.
+
+### Tools
 
 | Tool | What it does |
 |---|---|
@@ -115,18 +166,21 @@ Tools it exposes:
 | `name_speaker` | fix attribution; relabels the whole meeting |
 | `set_meeting_summary` | save a summary back onto a meeting |
 
-So you can ask Claude things like *"what did Priya commit to in the roadmap
-sync?"* or *"search every meeting for what we decided about latency."*
+So you can ask Claude *"what did Priya commit to in the roadmap sync?"* or
+*"search every meeting for what we decided about latency."*
 
 ---
 
 ## Tests
 
 ```bash
-./scripts/test-db.sh                     # SQL logic, throwaway Postgres (needs Docker)
-cd apps/ScribeCore && swift test         # parsing + cross-chunk stitching
-cd mcp-server && npm run typecheck
+./scripts/test-db.sh                # SQL logic, throwaway Postgres (needs Docker)
+cd apps/ScribeCore && swift test    # parsing + cross-chunk stitching
+npm run typecheck --workspaces      # both MCP servers
 ```
+
+The remote server's OAuth flow is tested separately, against a running dev
+server — see `packages/remote/test/README.md`.
 
 ---
 

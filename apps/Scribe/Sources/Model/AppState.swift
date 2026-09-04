@@ -21,17 +21,32 @@ final class AppState {
     var signedIn = false
     var people: [Person] = []
 
+    /// Mirrors the keychain. Kept as stored state because the keychain itself
+    /// is invisible to observation -- reading it in a computed property means
+    /// views never learn that a key was added, and the record button stays
+    /// disabled until something unrelated redraws it.
+    private(set) var hasGeminiKey: Bool
+
     init() {
         supabaseURL = UserDefaults.standard.string(forKey: "supabaseURL") ?? ""
         supabaseAnonKey = UserDefaults.standard.string(forKey: "supabaseAnonKey") ?? ""
+        hasGeminiKey = Keychain.get("gemini")?.isEmpty == false
         rebuild()
+    }
+
+    func setGeminiKey(_ key: String) throws {
+        try Keychain.set(key, for: "gemini")
+        hasGeminiKey = true
+    }
+
+    func clearGeminiKey() {
+        Keychain.delete("gemini")
+        hasGeminiKey = false
     }
 
     var isConfigured: Bool {
         !supabaseURL.isEmpty && !supabaseAnonKey.isEmpty && URL(string: supabaseURL) != nil
     }
-
-    var hasGeminiKey: Bool { Keychain.get("gemini")?.isEmpty == false }
 
     private func rebuild() {
         guard isConfigured, let url = URL(string: supabaseURL) else {
@@ -47,7 +62,10 @@ final class AppState {
     func refreshSession() async {
         guard let store else { signedIn = false; return }
         signedIn = await store.userId != nil
-        if signedIn { await refreshPeople() }
+        if signedIn {
+            try? await store.abandonStaleRecordings()
+            await refreshPeople()
+        }
     }
 
     func refreshPeople() async {

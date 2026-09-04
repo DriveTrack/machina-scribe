@@ -39,7 +39,7 @@ struct SettingsView: View {
                             .foregroundStyle(.green)
                             .font(.footnote)
                         Button("Remove", role: .destructive) {
-                            Keychain.delete("gemini")
+                            app.clearGeminiKey()
                             geminiKey = ""
                         }
                         .font(.footnote)
@@ -87,7 +87,7 @@ struct SettingsView: View {
 
     private func saveKey() {
         do {
-            try Keychain.set(geminiKey.trimmingCharacters(in: .whitespaces), for: "gemini")
+            try app.setGeminiKey(geminiKey.trimmingCharacters(in: .whitespaces))
             geminiKey = ""
             message = "Gemini key saved."
         } catch {

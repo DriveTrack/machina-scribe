@@ -3,17 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "MCP server exposing speaker-attributed meeting transcripts to Claude.",
+  "description": "Local stdio MCP server for machina-scribe transcripts.",
   "bin": { "machina-scribe-mcp": "dist/index.js" },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",
-    "@supabase/supabase-js": "^2.58.0",
+    "@scribe/mcp-core": "*",
     "zod": "^4.2.0"
   },
   "devDependencies": {

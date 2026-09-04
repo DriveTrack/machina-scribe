@@ -15,3 +15,7 @@ xcuserdata/
 .env
 .env.*
 !.env.example
+
+# Worker local secrets
+.dev.vars
+.wrangler/

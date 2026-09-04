@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "machina-scribe-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // The MCP session lives in a Durable Object, one per connected client.
+  "durable_objects": {
+    "bindings": [{ "name": "MCP_OBJECT", "class_name": "ScribeMCP" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ScribeMCP"] }],
+
+  // OAuth grants, tokens and registered clients. Create with:
+  //   npx wrangler kv namespace create OAUTH_KV
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "local-dev-placeholder" }],
+
+  "vars": {
+    "SUPABASE_URL": "https://YOUR-PROJECT.supabase.co",
+    "SUPABASE_ANON_KEY": "YOUR-ANON-KEY"
+  }
+  // SUPABASE_SERVICE_ROLE_KEY is a secret:
+  //   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+}

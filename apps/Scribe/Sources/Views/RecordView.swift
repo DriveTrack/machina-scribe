@@ -17,7 +17,10 @@ struct RecordView: View {
                 header
                 meter
                 controls
-                if session?.isRecording == true { taggingPad }
+                if session?.isRecording == true {
+                    taggingPad
+                    livePreview
+                }
                 if let phase = session?.phase { status(phase) }
             }
             .padding()
@@ -162,6 +165,51 @@ struct RecordView: View {
             }
         } message: {
             Text("They'll be tagged as speaking right now.")
+        }
+    }
+
+    // MARK: - Live preview
+
+    /// Rough, on-device, unsaved. Labelled as such so nobody mistakes it for
+    /// the speaker-attributed transcript that arrives after you stop.
+    @ViewBuilder
+    private var livePreview: some View {
+        if let recorder = session?.recorder {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 6) {
+                    Image(systemName: "waveform")
+                    Text("Live preview")
+                        .font(.headline)
+                }
+
+                switch recorder.live.availability {
+                case .ready:
+                    Text(recorder.live.text.isEmpty ? "Listening…" : recorder.live.text)
+                        .font(.callout)
+                        .foregroundStyle(recorder.live.text.isEmpty ? .secondary : .primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .animation(.default, value: recorder.live.text)
+                    Text("Rough and speakerless. The saved transcript is transcribed properly, with names, when you stop.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                case .denied:
+                    Text("Speech recognition permission was declined, so there's no live preview. Recording and the final transcript are unaffected.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                case .unavailableOnDevice:
+                    Text("This device can't transcribe on-device for your language, so the live preview is off — sending the audio to Apple to preview it isn't worth it. Recording and the final transcript are unaffected.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding()
+            .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
         }
     }
 

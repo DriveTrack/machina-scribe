@@ -24,5 +24,7 @@
 	<string>14.0</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Scribe records meetings so it can transcribe who said what. Audio is deleted as soon as the transcript comes back; it is never stored.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Used only for the rough live preview shown while you record. Scribe requires on-device recognition, so despite the notice above, this audio is not sent to Apple. Declining only hides the preview.</string>
 </dict>
 </plist>

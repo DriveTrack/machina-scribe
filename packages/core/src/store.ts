@@ -1,5 +1,12 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import type { Env } from './env.js';
+
+export interface StoreConfig {
+  supabaseUrl: string;
+  /** Service-role key. Bypasses RLS, so every query here filters by user id. */
+  supabaseKey: string;
+  /** Whose transcripts this store reads and writes. */
+  userId: string;
+}
 
 export interface MeetingRow {
   id: string;
@@ -37,11 +44,11 @@ export class Store {
   private readonly db: SupabaseClient;
   private readonly userId: string;
 
-  constructor(env: Env) {
-    this.db = createClient(env.supabaseUrl, env.supabaseKey, {
+  constructor(config: StoreConfig) {
+    this.db = createClient(config.supabaseUrl, config.supabaseKey, {
       auth: { persistSession: false, autoRefreshToken: false }
     });
-    this.userId = env.userId;
+    this.userId = config.userId;
   }
 
   private unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {

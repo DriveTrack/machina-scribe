@@ -1,0 +1,26 @@
+{
+  "name": "machina-scribe-remote",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Remote (OAuth-protected) MCP server for machina-scribe, on Cloudflare Workers.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "cf-typegen": "wrangler types",
+    "test:oauth": "node test/oauth-flow.test.mjs"
+  },
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "^0.10.3",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@scribe/mcp-core": "*",
+    "agents": "^0.22.0",
+    "zod": "^4.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250109.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.129.0"
+  }
+}

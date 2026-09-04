@@ -87,6 +87,26 @@ final class ScribeStore {
         try await updateMeeting(id, MeetingProgress(status: "failed", error: message))
     }
 
+    /// A meeting left in `recording` means the app died mid-capture: the audio
+    /// is gone, so it will never finish. Without this they pile up in the list
+    /// forever, each looking like it is still going.
+    ///
+    /// The cutoff is deliberately generous, so a genuinely long meeting running
+    /// on another device is never mistaken for a corpse.
+    func abandonStaleRecordings(olderThan hours: Int = 6) async throws {
+        struct Patch: Encodable {
+            let status = "failed"
+            let error = "Recording was interrupted before it could be transcribed."
+        }
+        let cutoff = Date().addingTimeInterval(-Double(hours) * 3600)
+        try await client
+            .from("meetings")
+            .update(Patch())
+            .eq("status", value: "recording")
+            .lt("started_at", value: cutoff)
+            .execute()
+    }
+
     // MARK: - Live tags
 
     private struct NewLiveTag: Encodable {

@@ -37,6 +37,11 @@ final class RecordingSession {
             phase = .failed("Microphone access was denied. Grant it in system settings.")
             return
         }
+        // Asked for before recording starts so the permission sheet does not
+        // appear over a meeting already in progress. A refusal only costs the
+        // live preview; the recording itself is unaffected.
+        _ = await recorder.live.prepare()
+
         do {
             let id = try await store.startMeeting(title: title, location: location)
             meetingId = id
