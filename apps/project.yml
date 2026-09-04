@@ -1,4 +1,8 @@
 name: Scribe
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+
 options:
   bundleIdPrefix: com.machinascribe
   deploymentTarget:

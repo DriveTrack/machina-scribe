@@ -25,3 +25,6 @@ xcuserdata/
 
 # local app build output (durable path for running the Mac app)
 apps/build/
+
+# local code-signing config
+apps/Local.xcconfig
