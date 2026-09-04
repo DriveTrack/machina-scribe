@@ -29,11 +29,17 @@ xcodebuild -project Scribe.xcodeproj -scheme Scribe-iOS \
   -allowProvisioningUpdates build \
   | grep -E 'error:|BUILD' || true
 
-APP=build/device/Build/Products/Debug-iphoneos/Scribe-iOS.app
+# PRODUCT_NAME changed the bundle name; accept either.
+APP=build/device/Build/Products/Debug-iphoneos/Scribe.app
+[ -d "$APP" ] || APP=build/device/Build/Products/Debug-iphoneos/Scribe-iOS.app
 [ -d "$APP" ] || { echo "build produced no app" >&2; exit 1; }
 
 echo "installing…"
-xcrun devicectl device install app --device "$UDID" "$APP"
+# Works over Wi-Fi as well as USB: devicectl brings the tunnel up on demand,
+# even when `list devices` reports the phone as disconnected. It needs the
+# phone unlocked and on the same network, and a longer timeout than the
+# default, because establishing that tunnel is not instant.
+xcrun devicectl device install app --timeout 120 --device "$UDID" "$APP"
 echo
 echo "Installed. On the phone: Settings → General → VPN & Device Management →"
 echo "trust the developer certificate, then open Scribe."
