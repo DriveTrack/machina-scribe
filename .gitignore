@@ -19,3 +19,6 @@ xcuserdata/
 # Worker local secrets
 .dev.vars
 .wrangler/
+
+# local secrets
+.secrets/
