@@ -172,7 +172,36 @@ struct NotionExporter {
         let data = try await call("POST", "/v1/pages", body: body)
         struct Page: Decodable { let id: String; let url: String? }
         let page = try JSONDecoder().decode(Page.self, from: data)
+
+        try await fillTranscript(page: page.id, transcript: transcript)
+
         return Result(pageId: page.id, url: page.url ?? "https://notion.so/\(page.id.replacingOccurrences(of: "-", with: ""))")
+    }
+
+    /// Append the whole transcript into the toggle, 100 blocks at a time.
+    ///
+    /// Notion accepts at most 100 children per request and 2000 characters per
+    /// rich text item, so a two-hour meeting cannot go in with the page. It
+    /// goes in afterwards, in batches, and nothing is dropped.
+    private func fillTranscript(page: String, transcript: String) async throws {
+        let paragraphs = chunk(transcript, limit: 1_900)
+        guard !paragraphs.isEmpty else { return }
+
+        let children = try await call("GET", "/v1/blocks/\(page)/children", body: nil)
+        struct Children: Decodable {
+            struct Block: Decodable { let id: String; let type: String }
+            let results: [Block]
+        }
+        guard let toggle = try JSONDecoder().decode(Children.self, from: children)
+            .results.first(where: { $0.type == "toggle" })?.id
+        else { return }
+
+        for batch in stride(from: 0, to: paragraphs.count, by: 100) {
+            let slice = paragraphs[batch..<min(batch + 100, paragraphs.count)]
+            _ = try await call("PATCH", "/v1/blocks/\(toggle)/children", body: [
+                "children": slice.map { paragraph($0) }
+            ])
+        }
     }
 
     // MARK: - Page content
@@ -195,6 +224,13 @@ struct NotionExporter {
         if let summary {
             out.append(heading("Summary"))
             out.append(paragraph(summary.summary))
+
+            // The full transcript sits directly under the summary, but folded
+            // away. Ninety thousand characters placed openly between the
+            // summary and the action items would bury everything worth
+            // reading; a toggle keeps it one click from the summary without
+            // pushing the rest off the page.
+            out.append(transcriptToggle)
 
             if !summary.actionItems.isEmpty {
                 out.append(heading("Action items"))
@@ -225,23 +261,25 @@ struct NotionExporter {
             out.append(paragraph(notes))
         }
 
-        out.append(heading("Transcript"))
-        // Notion caps a rich text item at 2000 characters and a request at 100
-        // blocks, so the transcript is split and, if need be, truncated with a
-        // note rather than silently cut off.
-        let paragraphs = chunk(transcript, limit: 1_900)
-        let room = max(0, 95 - out.count)
-        for piece in paragraphs.prefix(room) {
-            out.append(paragraph(piece))
-        }
-        if paragraphs.count > room {
-            out.append(paragraph(
-                "The rest of the transcript was too long for one Notion page; "
-                + "it is complete in Scribe.",
-                italic: true
-            ))
+        // When there is no summary there is no toggle either, so the
+        // transcript still needs a home.
+        if summary == nil {
+            out.append(transcriptToggle)
         }
         return out
+    }
+
+    /// An empty, collapsed container. The transcript is appended into it after
+    /// the page exists, because a page can only be created with 100 blocks and
+    /// a long meeting runs to several hundred.
+    private var transcriptToggle: [String: Any] {
+        [
+            "object": "block", "type": "toggle",
+            "toggle": [
+                "rich_text": [["text": ["content": "Full transcript"]]],
+                "children": []
+            ]
+        ]
     }
 
     private func heading(_ text: String) -> [String: Any] {
