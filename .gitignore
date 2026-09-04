@@ -22,3 +22,6 @@ xcuserdata/
 
 # local secrets
 .secrets/
+
+# local app build output (durable path for running the Mac app)
+apps/build/

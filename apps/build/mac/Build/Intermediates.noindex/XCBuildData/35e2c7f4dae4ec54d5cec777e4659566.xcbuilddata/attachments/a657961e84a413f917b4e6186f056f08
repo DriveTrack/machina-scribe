@@ -1,4 +1,0 @@
-module RealtimeV2 {
-header "RealtimeV2-Swift.h"
-export *
-}
