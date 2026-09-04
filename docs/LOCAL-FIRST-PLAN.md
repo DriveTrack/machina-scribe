@@ -228,6 +228,51 @@ a direct consequence of today's migration. **First move the real 111-minute
 meeting out of that Docker volume** — it exists nowhere else, and the hosted
 database is empty.
 
+## Storage — one file on the device
+
+Transcription and speaker separation both run here now, so storing the result
+on somebody's server would have made "your meeting never leaves this machine"
+untrue for the only artefact anyone actually reads.
+
+Meetings live in `~/Library/Application Support/Scribe/scribe.sqlite`, through
+the system SQLite every Apple platform already ships. No package, no account,
+nothing to configure before the app works -- and the whole Supabase SDK comes
+out of the binary with it.
+
+The schema mirrors the Postgres one row for row, minus `user_id`: that column
+scoped rows to an account, and there is exactly one user of a file in your own
+home directory. Keeping the shape means an optional sync can map straight back
+onto it later.
+
+Two things the old backend forced on us are simply gone. There is no 1000-row
+paging ceiling to silently truncate a transcript, and no rate limit to pace
+around. Two things it gave us had to be rebuilt: `resolve_live_tags` and
+`tag_problems` are now Swift, with the same "a tap lands inside the turn of
+whoever was talking" rule and the same bias toward whoever *just stopped*
+speaking over whoever is about to start.
+
+### What real data caught
+
+The existing 111-minute meeting was imported and then read back through
+`LocalStore` itself rather than eyeballed, which found two things a test
+against fixtures would not have:
+
+- **Every `where meeting_id = ?` matched nothing.** Postgres writes UUIDs
+  lowercase; Swift's `UUID.uuidString` is uppercase; SQLite compares text
+  case-sensitively. Meetings listed fine (no filter) while every transcript
+  came back empty. Fixed on both sides: ids bind lowercased, and the id columns
+  are `collate nocase` so it cannot recur whatever writes them.
+- **Search missed words it contained.** FTS5 matches whole tokens, so
+  `transcript` found nothing in a meeting that says "transcripts" and
+  "transcription". Now tokenised `porter unicode61`, and the query is parsed
+  into quoted terms rather than passed through -- an apostrophe in a normal
+  phrase is a syntax error in FTS5's query language, which would have failed
+  the search rather than returning nothing.
+
+Verified after the fix: 1473 segments imported, byte-for-byte identical to the
+hosted rows, and read back through the app's own store as 1471 transcript lines
+for the long meeting with speakers resolved to Chris, Jose, Nia and Shania.
+
 ## What this deletes
 
 | File | Fate |

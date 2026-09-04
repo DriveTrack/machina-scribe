@@ -11,9 +11,6 @@ options:
   createIntermediateGroups: true
 
 packages:
-  Supabase:
-    url: https://github.com/supabase/supabase-swift
-    from: "2.0.0"
   ScribeCore:
     path: ScribeCore
   FluidAudio:
@@ -28,8 +25,6 @@ targets:
       - path: Scribe/Sources
       - path: Scribe/Resources/Assets.xcassets
     dependencies:
-      - package: Supabase
-        product: Supabase
       - package: ScribeCore
         product: ScribeCore
       - package: FluidAudio
@@ -67,8 +62,6 @@ targets:
       - path: Scribe/Sources
       - path: Scribe/Resources/Assets.xcassets
     dependencies:
-      - package: Supabase
-        product: Supabase
       - package: ScribeCore
         product: ScribeCore
       - package: FluidAudio

@@ -5,8 +5,6 @@ struct SettingsView: View {
 
     @Environment(AppState.self) private var app
     @State private var geminiKey = ""
-    @State private var email = ""
-    @State private var password = ""
     @State private var message: String?
     @State private var busy = false
     @State private var heldBytes: Int64 = 0
@@ -19,17 +17,23 @@ struct SettingsView: View {
 
         Form {
             Section {
-                TextField("Project URL", text: $app.supabaseURL)
-                    .textContentType(.URL)
+                LabeledContent("Meetings") {
+                    Text(app.storageDescription)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+                Button("Show in Finder") { app.revealStore() }
                     #if os(iOS)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
+                    .hidden()
                     #endif
-                SecureField("Anon / publishable key", text: $app.supabaseAnonKey)
             } header: {
-                Text("Supabase")
+                Text("Where your meetings live")
             } footer: {
-                Text("Both are safe to store on device. Find them under Project Settings → API.")
+                Text(
+                    "One file on this device. Nothing is uploaded, there is no "
+                    + "account, and deleting the app deletes the meetings with it. "
+                    + "Back it up the way you back up anything else."
+                )
             }
 
             Section {
@@ -163,38 +167,7 @@ struct SettingsView: View {
             } footer: {
                 Text(app.keepAudioHours == 0
                      ? "Audio is deleted the moment its transcript is stored. Transcripts are kept; recordings are not."
-                     : "Audio stays on this device only, so you can play a meeting back and work out who a voice was. It is deleted automatically once the window passes, and never uploaded anywhere except Google for transcription.")
-            }
-
-            Section("Account") {
-                if app.signedIn {
-                    Button("Sign out", role: .destructive) {
-                        Task {
-                            try? await app.store?.signOut()
-                            await app.refreshSession()
-                        }
-                    }
-                } else {
-                    TextField("Email", text: $email)
-                        #if os(iOS)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.emailAddress)
-                        #endif
-                    SecureField("Password", text: $password)
-                    HStack {
-                        Button("Sign in") { authenticate(signingUp: false) }
-                            .buttonStyle(.borderedProminent)
-                        Button("Create account") { authenticate(signingUp: true) }
-                            .buttonStyle(.bordered)
-                    }
-                    .disabled(busy || !app.isConfigured)
-
-                    Text("No account yet? Pick any email and password and choose Create account — this is your own database.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+                     : "Audio stays on this device only, so you can play a meeting back and work out who a voice was. It is deleted automatically once the window passes. With on-device transcription it is never uploaded at all.")
             }
 
             if let message {
@@ -257,25 +230,4 @@ struct SettingsView: View {
         }
     }
 
-    private func authenticate(signingUp: Bool) {
-        busy = true
-        message = nil
-        Task {
-            do {
-                if signingUp {
-                    try await app.store?.signUp(email: email, password: password)
-                } else {
-                    try await app.store?.signIn(email: email, password: password)
-                }
-                await app.refreshSession()
-                password = ""
-                if !app.signedIn {
-                    message = "Check your email to confirm the account, then sign in."
-                }
-            } catch {
-                message = error.localizedDescription
-            }
-            busy = false
-        }
-    }
 }

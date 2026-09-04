@@ -31,7 +31,7 @@ final class AppState {
         didSet { UserDefaults.standard.set(supabaseAnonKey, forKey: "supabaseAnonKey"); rebuild() }
     }
 
-    private(set) var store: ScribeStore?
+    private(set) var store: LocalStore?
     private(set) var session: RecordingSession?
     var signedIn = false
     var people: [Person] = []
@@ -176,8 +176,26 @@ final class AppState {
         Keychain.get("gemini").map { Summarizer(apiKey: $0, model: summaryModel) }
     }
 
-    var isConfigured: Bool {
-        !supabaseURL.isEmpty && !supabaseAnonKey.isEmpty && URL(string: supabaseURL) != nil
+    /// Nothing has to be configured any more -- the store is a local file.
+    /// Kept so the onboarding gate has something to ask.
+    var isConfigured: Bool { store != nil }
+
+    /// Set when the database could not be opened, which is the only way the
+    /// app can now fail to start.
+    private(set) var storeError: String?
+
+    /// Where the meetings actually are, said plainly. A local-first app owes
+    /// the user a straight answer to "so where is my data".
+    var storageDescription: String {
+        (try? LocalStore.defaultURL().path(percentEncoded: false))
+            ?? "this device"
+    }
+
+    func revealStore() {
+        #if os(macOS)
+        guard let url = try? LocalStore.defaultURL() else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+        #endif
     }
 
     /// Whether a recording could actually be transcribed if one started now.
@@ -198,12 +216,16 @@ final class AppState {
     }
 
     private func rebuild() {
-        guard isConfigured, let url = URL(string: supabaseURL) else {
-            store = nil
+        // No URL, no key, no account. The meetings live in a file in this
+        // user's own Application Support directory, so there is nothing to
+        // configure before the app works and nothing to be signed out of.
+        guard let store = try? LocalStore() else {
+            self.store = nil
             session = nil
+            storeError = "Could not open the meetings database."
             return
         }
-        let store = ScribeStore(url: url, anonKey: supabaseAnonKey)
+        storeError = nil
         self.store = store
         let session = RecordingSession(store: store, engine: transcriptionEngine)
         session.archive = archive
@@ -213,7 +235,9 @@ final class AppState {
 
     func refreshSession() async {
         guard let store else { signedIn = false; return }
-        signedIn = await store.userId != nil
+        // Local storage has no session to be in or out of; the file either
+        // opened or it did not.
+        signedIn = true
         if signedIn {
             try? await store.abandonStaleRecordings()
             await refreshPeople()

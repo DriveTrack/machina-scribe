@@ -28,7 +28,7 @@ final class RecordingSession {
     var archive = RecordingArchive()
     /// Fired once a transcript is stored, so lists can refresh themselves.
     var onTranscriptSaved: (() -> Void)?
-    private let store: ScribeStore
+    private let store: LocalStore
     /// Which engine to use. Read once when the session is built so a setting
     /// changed mid-meeting cannot swap engines underneath a running recording.
     private let engine: AppState.TranscriptionEngine
@@ -38,7 +38,7 @@ final class RecordingSession {
     /// Kept when transcription fails so the meeting can be retried rather than lost.
     private var pendingAudio: (url: URL, durationMs: Int)?
 
-    init(store: ScribeStore, engine: AppState.TranscriptionEngine = .onDevice) {
+    init(store: LocalStore, engine: AppState.TranscriptionEngine = .onDevice) {
         self.store = store
         self.engine = engine
     }
