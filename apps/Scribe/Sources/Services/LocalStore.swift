@@ -363,6 +363,49 @@ final class LocalStore {
         }
     }
 
+    /// Put a voice back to `Speaker N`.
+    ///
+    /// Naming was a one-way door: the naming UI only ever appeared for voices
+    /// that were still unnamed, so a wrong name -- or the diarizer splitting
+    /// one person into two and you naming both -- could not be undone without
+    /// editing the database by hand.
+    ///
+    /// The person row is left alone. They may be named on other meetings, and
+    /// deleting a person because one attribution was wrong would take those
+    /// with it.
+    func clearSpeaker(meeting: UUID, label: String) async throws {
+        try db.run("""
+            update speakers set person_id = null, resolved_by = null, match_delta_ms = null
+            where meeting_id = ? and label = ?
+            """, [.init(meeting), .init(label)])
+    }
+
+    /// Every voice in a meeting, named or not, with enough to tell them apart.
+    func speakers(meeting: UUID) async throws -> [SpeakerSummary] {
+        try db.run("""
+            select sp.label, p.name, sp.resolved_by,
+                   count(s.id) as turns,
+                   coalesce(sum(s.end_ms - s.start_ms), 0) as speaking_ms,
+                   min(s.start_ms) as first_ms
+            from speakers sp
+            left join people p on p.id = sp.person_id
+            left join segments s on s.speaker_id = sp.id
+            where sp.meeting_id = ?
+            group by sp.id order by sp.label
+            """, [.init(meeting)])
+            .compactMap { row in
+                guard let label = row.string("label") else { return nil }
+                return SpeakerSummary(
+                    label: label,
+                    name: row.string("name"),
+                    resolvedBy: row.string("resolved_by"),
+                    turns: row.int("turns") ?? 0,
+                    speakingMs: row.int("speaking_ms") ?? 0,
+                    firstMs: row.int("first_ms") ?? 0
+                )
+            }
+    }
+
     @discardableResult
     private func upsertPerson(named name: String) throws -> String {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)

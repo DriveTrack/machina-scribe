@@ -17,6 +17,7 @@ struct TranscriptView: View {
     @State private var audioURL: URL?
     @State private var audioExpiry: Date?
     @State private var playback = PlaybackController()
+    @State private var speakers: [SpeakerSummary] = []
     @State private var summary: MeetingSummary?
     @State private var meeting: Meeting?
     @State private var working: String?
@@ -28,7 +29,7 @@ struct TranscriptView: View {
                 summarySection
                 if !problems.isEmpty { problemsBanner }
                 if audioURL != nil { player }
-                if !unnamedLabels.isEmpty { namingPrompt }
+                if speakers.count > 1 || !unnamedLabels.isEmpty { voicesPanel }
 
                 ForEach(grouped, id: \.first!.idx) { group in
                     turn(group)
@@ -124,52 +125,103 @@ struct TranscriptView: View {
         return Array(Set(labels)).sorted()
     }
 
-    private var namingPrompt: some View {
+    /// Every voice in the meeting, named or not, each one changeable.
+    ///
+    /// This used to list only the voices that were still `Speaker N`, which
+    /// made naming a one-way door: pick the wrong person, or name two voices
+    /// that turn out to be the same person, and there was no way back short of
+    /// editing the database. Every voice is listed now, and a named one can be
+    /// renamed or put back to unnamed.
+    private var voicesPanel: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Unidentified voices")
+            Text("Voices")
                 .font(.headline)
-            Text("A long meeting is transcribed in parts, and someone who stays quiet across a part boundary can come back as a new voice. Assigning one of these to a person you already named merges them — every turn moves across at once.")
+            Text("Naming a voice renames every turn it speaks, across the whole meeting. Give two voices the same name and they merge — which is how you fix one person being split in two.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
-            ForEach(unnamedLabels, id: \.self) { label in
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
-                        Text(label).font(.subheadline.weight(.semibold))
-                        Text(sample(for: label))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                        Spacer(minLength: 0)
-                        if audioURL != nil {
-                            Button {
-                                if let at = firstStart(of: label) { playback.play(fromMs: at) }
-                            } label: {
-                                Image(systemName: "play.circle")
-                            }
-                            .buttonStyle(.plain)
-                            .help("Hear this voice")
-                        }
-                    }
-                    FlowLayout(spacing: 6) {
-                        ForEach(knownNames, id: \.self) { person in
-                            Button(person) {
-                                Task { await assign(label: label, to: person) }
-                            }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                        }
-                        Button("Someone else…") { naming = label; nameField = "" }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                    }
-                }
-                .padding(.vertical, 4)
+            ForEach(speakers) { speaker in
+                voiceRow(speaker)
+                    .padding(.vertical, 4)
             }
         }
         .padding()
         .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    @ViewBuilder
+    private func voiceRow(_ speaker: SpeakerSummary) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
+                Text(speaker.displayName)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(speaker.isNamed ? .primary : .secondary)
+                if speaker.isNamed {
+                    Text(speaker.label)
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+                Text(speaker.detail)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                // A voice with one short turn is usually the diarizer slicing
+                // a moment of crosstalk out of someone else's sentence.
+                if speaker.looksLikeNoise {
+                    Text("probably not a real voice")
+                        .font(.caption2)
+                        .foregroundStyle(.orange)
+                }
+                Spacer(minLength: 0)
+                if audioURL != nil {
+                    Button {
+                        if let at = firstStart(of: speaker.label) { playback.play(fromMs: at) }
+                    } label: {
+                        Image(systemName: "play.circle")
+                    }
+                    .buttonStyle(.plain)
+                    .help("Hear this voice")
+                }
+            }
+
+            Text(sample(for: speaker.label))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+
+            FlowLayout(spacing: 6) {
+                // Everyone already named in this meeting, so merging two
+                // voices is one tap rather than retyping a name exactly.
+                ForEach(knownNames.filter { $0 != speaker.name }, id: \.self) { person in
+                    Button(person) {
+                        Task { await assign(label: speaker.label, to: person) }
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+                Button(speaker.isNamed ? "Rename…" : "Someone else…") {
+                    naming = speaker.label
+                    nameField = speaker.name ?? ""
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+
+                if speaker.isNamed {
+                    Button("Reset") {
+                        Task { await reset(label: speaker.label) }
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .help("Put this voice back to \(speaker.label)")
+                }
+            }
+        }
+    }
+
+    /// Put one voice back to `Speaker N`.
+    private func reset(label: String) async {
+        try? await app.store?.clearSpeaker(meeting: meetingId, label: label)
+        await load()
     }
 
     /// People already attached to a voice in this meeting -- the likely answers.
@@ -208,6 +260,7 @@ struct TranscriptView: View {
         return "“\(line.text.prefix(60))…”"
     }
 
+    /// Attach a name to a voice, replacing whatever was there.
     private func assign(label: String, to person: String) async {
         try? await app.store?.nameSpeaker(meeting: meetingId, label: label, name: person)
         await app.refreshPeople()
@@ -508,6 +561,7 @@ struct TranscriptView: View {
     private func load() async {
         isLoading = true
         lines = (try? await app.store?.transcript(meeting: meetingId)) ?? []
+        speakers = (try? await app.store?.speakers(meeting: meetingId)) ?? []
         problems = (try? await app.store?.tagProblems(meeting: meetingId)) ?? []
         summary = try? await app.store?.summary(meeting: meetingId)
         meeting = try? await app.store?.meeting(meetingId)

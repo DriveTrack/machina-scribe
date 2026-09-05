@@ -100,3 +100,34 @@ struct TagProblem: Codable, Identifiable, Hashable, Sendable {
 
     var isConflict: Bool { kind == "conflict" }
 }
+
+
+/// One diarized voice in a meeting, named or not.
+///
+/// Carries enough to tell two voices apart without scrolling the transcript --
+/// how much they said and when they first spoke, which is usually all you need
+/// to recognise who somebody was.
+struct SpeakerSummary: Identifiable, Hashable, Sendable {
+    var label: String
+    var name: String?
+    var resolvedBy: String?
+    var turns: Int
+    var speakingMs: Int
+    var firstMs: Int
+
+    var id: String { label }
+    var isNamed: Bool { name?.isEmpty == false }
+    var displayName: String { name ?? label }
+
+    /// "4 turns · 2m 10s"
+    var detail: String {
+        let seconds = speakingMs / 1000
+        let time = seconds >= 60 ? "\(seconds / 60)m \(seconds % 60)s" : "\(seconds)s"
+        return "\(turns) turn\(turns == 1 ? "" : "s") · \(time)"
+    }
+
+    /// A voice with almost nothing attributed to it is usually the diarizer
+    /// slicing a moment of crosstalk out of somebody else's sentence, not a
+    /// person who was in the room.
+    var looksLikeNoise: Bool { turns <= 1 && speakingMs < 4_000 }
+}
