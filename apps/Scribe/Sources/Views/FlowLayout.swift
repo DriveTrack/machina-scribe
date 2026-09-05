@@ -8,17 +8,17 @@ struct FlowLayout: Layout {
     var spacing: CGFloat = 8
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let width = proposal.width ?? .infinity
+        let width = resolvedWidth(proposal.width)
         let rows = arrange(subviews: subviews, in: width)
-        let height = rows.reduce(into: CGFloat(0)) { total, row in
-            total += row.height + (total > 0 ? spacing : 0)
-        }
-        return CGSize(width: proposal.width ?? rows.map(\.width).max() ?? 0, height: height)
+        return CGSize(width: contentWidth(of: rows, within: proposal.width), height: height(of: rows))
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        // Arranged against the same width `sizeThatFits` used. When the two
+        // disagree, the height reported and the height actually filled differ,
+        // and SwiftUI re-proposes forever trying to settle it.
         var y = bounds.minY
-        for row in arrange(subviews: subviews, in: bounds.width) {
+        for row in arrange(subviews: subviews, in: resolvedWidth(bounds.width)) {
             var x = bounds.minX
             for item in row.items {
                 let size = subviews[item].sizeThatFits(.unspecified)
@@ -30,6 +30,35 @@ struct FlowLayout: Layout {
                 x += size.width + spacing
             }
             y += row.height + spacing
+        }
+    }
+
+    /// A width to wrap against.
+    ///
+    /// SwiftUI legitimately proposes `nil`, `0` and `.infinity` while it works
+    /// out what fits, and none of those are a real line length. Anything that
+    /// is not a positive finite number means "unconstrained", which wraps
+    /// nowhere and puts every child on one row.
+    private func resolvedWidth(_ proposed: CGFloat?) -> CGFloat {
+        guard let proposed, proposed.isFinite, proposed > 0 else { return .infinity }
+        return proposed
+    }
+
+    /// What this layout actually needs, never what it was offered.
+    ///
+    /// The previous version returned `proposal.width` straight back -- so when
+    /// SwiftUI proposed `.infinity` to find the ideal size, it got `.infinity`
+    /// as an answer. An infinite ideal size propagates into every ancestor's
+    /// arithmetic and the layout engine cannot converge.
+    private func contentWidth(of rows: [Row], within proposed: CGFloat?) -> CGFloat {
+        let needed = rows.map(\.width).max() ?? 0
+        guard let proposed, proposed.isFinite else { return needed }
+        return min(needed, proposed)
+    }
+
+    private func height(of rows: [Row]) -> CGFloat {
+        rows.reduce(into: CGFloat(0)) { total, row in
+            total += row.height + (total > 0 ? spacing : 0)
         }
     }
 

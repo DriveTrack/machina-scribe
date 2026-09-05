@@ -52,7 +52,19 @@ struct TranscriptView: View {
         .navigationTitle("Transcript")
         .task { await load() }
         .onDisappear { playback.stop() }
-        .alert("Who is this?", isPresented: .constant(naming != nil)) {
+        // A real binding, not `.constant(naming != nil)`.
+        //
+        // SwiftUI dismisses an alert by writing `false` back through this
+        // binding. A constant binding swallows that write, so `naming` stayed
+        // non-nil, so the alert re-presented itself immediately -- and the app
+        // span at 100% CPU inside the layout engine, re-laying out the alert's
+        // text field forever. It froze the moment you tried to name a speaker.
+        .alert("Who is this?", isPresented: Binding(
+            get: { naming != nil },
+            set: { presented in
+                if !presented { naming = nil; nameField = "" }
+            }
+        )) {
             TextField("Name", text: $nameField)
             Button("Cancel", role: .cancel) { naming = nil; nameField = "" }
             Button("Save") { Task { await commitName() } }
