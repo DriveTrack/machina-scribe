@@ -35,9 +35,27 @@ struct TranscriptView: View {
                 }
             }
             .padding()
-            .frame(maxWidth: 720)
-            .frame(maxWidth: .infinity)
+            // No `.textSelection` anywhere in here, deliberately.
+            //
+            // It hosts an AppKit SelectionOverlay behind each selectable Text.
+            // Clicking a line set that view invalidating its intrinsic content
+            // size, which forced a re-layout, which re-measured the overlay,
+            // which invalidated again: 100% CPU and a window that never
+            // repainted. Confirmed by bisection -- removing this one modifier
+            // takes the same click from spinning forever to 0% CPU. Moving it
+            // from the individual turns up to this container did NOT help; the
+            // hosted overlay is still there either way.
+            //
+            // Copying is served by the toolbar button instead, which is what
+            // people actually wanted selection for on a transcript this long.
+            //
+            // The width is one definite `maxWidth` too. It used to be
+            // `.frame(maxWidth: 720)` wrapped in `.frame(maxWidth: .infinity)`,
+            // and two competing proposals inside a ScrollView's LazyVStack
+            // gave the hosted view no stable width to settle on.
+            .frame(maxWidth: 720, alignment: .leading)
         }
+        .scrollDisabled(false)
         .overlay {
             if isLoading {
                 ProgressView()
@@ -50,6 +68,17 @@ struct TranscriptView: View {
             }
         }
         .navigationTitle("Transcript")
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    copyTranscript()
+                } label: {
+                    Label("Copy transcript", systemImage: "doc.on.doc")
+                }
+                .help("Copy the whole transcript, with speaker names")
+                .disabled(lines.isEmpty)
+            }
+        }
         .task { await load() }
         .onDisappear { playback.stop() }
         // A real binding, not `.constant(naming != nil)`.
@@ -148,6 +177,24 @@ struct TranscriptView: View {
         Array(Set(lines.filter { $0.speaker != $0.speakerLabel }.map(\.speaker))).sorted()
     }
 
+    /// The whole transcript on the clipboard, speaker names and timecodes
+    /// included -- what selection was there for, without a hosted view per
+    /// turn measuring itself in a loop.
+    private func copyTranscript() {
+        let text = grouped.map { group in
+            "[\(group[0].timecode)] \(group[0].speaker): "
+                + group.map(\.text).joined(separator: " ")
+        }.joined(separator: "\n\n")
+
+        #if os(macOS)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        #else
+        UIPasteboard.general.string = text
+        #endif
+        working = "Transcript copied."
+    }
+
     private func firstStart(of label: String) -> Int? {
         lines.first { $0.speakerLabel == label }?.startMs
     }
@@ -186,7 +233,6 @@ struct TranscriptView: View {
             }
             Text(group.map(\.text).joined(separator: " "))
                 .font(.body)
-                .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.vertical, 4)
